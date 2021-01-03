@@ -14,7 +14,6 @@ const Input = styled.input`
   color: ${({ theme }) => theme.color.black};
   width: 100%;
   font-size: ${({ theme }) => theme.font.md}px;
-  line-height: 1.5;
   border-radius: 10px;
   padding: ${({ theme }) => `${theme.space.sm}px ${theme.space.sm}px`};
   padding-left: ${({ theme }) => theme.icon.md + theme.space.sm * 2}px;

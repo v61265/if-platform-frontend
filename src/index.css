@@ -48,6 +48,7 @@ code {
 button, input, select {
   outline: none;
   border: none;
+  line-height: inherit;
 }
 
 button {
