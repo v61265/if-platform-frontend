@@ -19,7 +19,6 @@
     "styled-components": "^5.2.1"
   },
   "homepage": "https://v61265.github.io/if-platform-frontend",
-
   "scripts": {
     "predeploy": "npm run build",
     "deploy": "gh-pages -d build",
