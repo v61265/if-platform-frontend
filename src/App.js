@@ -1,24 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { HashRouter as Router, Switch, Route } from "react-router-dom";
-import Header from "./components/Header";
+import Footer from "./components/Footer";
+import { Header } from "./components/Header";
 import LoginPage from "./page/LoginPage";
 
 function App() {
-  let isLogin = true;
+  const [isLogin, setIsLogin] = useState(false);
+  const handleLogin = () => {
+    setIsLogin(true);
+  };
   return (
     <Router>
-      {isLogin ? (
-        <>
-          <Header />
-          <Switch>
-            <Route path="/">
-              <h1>home</h1>
-            </Route>
-          </Switch>
-        </>
-      ) : (
-        <LoginPage />
-      )}
+      <Header isLogin={isLogin} />
+      <Switch>
+        <Route path="/">
+          {isLogin ? <h1>home</h1> : <LoginPage handleLogin={handleLogin} />}
+        </Route>
+      </Switch>
+      <Footer />
     </Router>
   );
 }

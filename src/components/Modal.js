@@ -2,15 +2,16 @@ import styled from "styled-components";
 import { Page, PageContainer } from "./Page";
 import { CloseButton, Button } from "./Button";
 import { IconInput, IconSelectInput } from "./Input";
-import { H4, SText, XXSText } from "./Text";
+import { H4, Ps, Pxxs } from "./Text";
 import PropTypes from "prop-types";
 
 const Mask = styled(Page)`
   background: ${({ theme }) => theme.color.mask};
   position: fixed;
+  top: 0;
   width: 100%;
   height: 100vh;
-  z-index: 2;
+  z-index: 6;
 `;
 const StyledModal = styled(PageContainer)`
   width: 600px;
@@ -31,7 +32,7 @@ export function TextModal({ content, handleCloseModal }) {
       <StyledTextModal>
         <CloseButton handleCloseModal={handleCloseModal} />
         {content.texts.map((text) => (
-          <SText>{text}</SText>
+          <Ps>{text}</Ps>
         ))}
       </StyledTextModal>
     </Mask>
@@ -59,7 +60,7 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
       <StyledFormModal>
         <CloseButton handleCloseModal={handleCloseModal} />
         <H4>{content.title}</H4>
-        <XXSText>{content.description}</XXSText>
+        <Pxxs>{content.description}</Pxxs>
         {content.components.map((component) =>
           component.type === "inputGroup" ? (
             <IconSelectInput
@@ -81,7 +82,7 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
         )}
         <Button
           value={content.success}
-          onClick={handleSubmit}
+          handleOnClick={handleSubmit}
           text={content.submit}
         />
       </StyledFormModal>

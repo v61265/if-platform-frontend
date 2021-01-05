@@ -1,16 +1,14 @@
 import styled from "styled-components";
 import { LinkButton, Button } from "../components/Button";
 import { IconInput } from "../components/Input";
-import { Logo } from "../components/Image";
-import { SText } from "../components/Text";
+import logoImage from "../png/logo_image.png";
+import { Ps } from "../components/Text";
 import { TextModal, FormModal } from "../components/Modal";
 import { Page, PageContainer } from "../components/Page";
 import { modalContent, alertText } from "../constants/variable";
 import { useState } from "react";
+import PropTypes from "prop-types";
 
-const MaxPage = styled(Page)`
-  height: 100vh;
-`;
 const LoginPageContainer = styled(PageContainer)`
   display: flex;
   position: relative;
@@ -19,15 +17,15 @@ const LoginPageContainer = styled(PageContainer)`
     flex-direction: column-reverse;
   }
 `;
-const LoginImage = styled(Logo)`
+
+const LoginImage = styled.img`
   width: 200px;
+  height: 100%;
   ${({ theme }) => theme.media.sm} {
-    width: 40px;
-    height: 100px;
-    margin: 0 auto;
-    margin-bottom: ${({ theme }) => theme.space.md}px;
+    display: none;
   }
 `;
+
 const LoginForm = styled.div`
   flex: 1 0;
   padding: ${({ theme }) => theme.space.lg}px;
@@ -38,14 +36,15 @@ const LoginForm = styled.div`
     flex-grow: 0;
   }
 `;
+
 const DashLine = styled.hr`
-  border-top: 1px dotted ${({ theme }) => theme.color.primary};
+  border-top: 1px dotted ${({ theme }) => theme.color.secondary};
 `;
 
 const initIsModal = {};
 Object.keys(modalContent).map((modal) => (initIsModal[modal] = false));
 
-export default function LoginPage() {
+export default function LoginPage({ handleLogin }) {
   const [isModal, setIsModal] = useState(initIsModal);
   const handleOpenModal = ({ target }) => {
     setIsModal({ ...isModal, [target.value]: true });
@@ -56,11 +55,12 @@ export default function LoginPage() {
   const handleSubmit = ({ target }) => {
     alert(target.value + " submit");
     handleCloseModal({ target });
+    handleLogin();
   };
   return (
-    <MaxPage>
+    <Page>
       <LoginPageContainer>
-        <LoginImage image>想像朋友寫作會</LoginImage>
+        <LoginImage src={logoImage} alt="想像朋友寫作會" />
         <LoginForm>
           <IconInput type={"text"} placeholder={"你的帳戶"} icon={"username"} />
           <IconInput
@@ -70,16 +70,16 @@ export default function LoginPage() {
             alert={true ? alertText.usernamePasswordIncorrect : ""}
           />
           <LinkButton
-            value={modalContent.forgetPassword.name}
-            onClick={handleOpenModal}
             text={"忘記密碼"}
+            value={modalContent.forgetPassword.name}
+            handleOnClick={handleOpenModal}
           />
-          <Button>登入</Button>
+          <Button text={"登入"} />
           <DashLine />
-          <SText>還沒有帳號嗎？</SText>
+          <Ps>還沒有帳號嗎？</Ps>
           <Button
             value={modalContent.register.name}
-            onClick={handleOpenModal}
+            handleOnClick={handleOpenModal}
             text={"註冊"}
           />
         </LoginForm>
@@ -103,6 +103,9 @@ export default function LoginPage() {
           />
         );
       })}
-    </MaxPage>
+    </Page>
   );
 }
+LoginPage.propTypes = {
+  handleLogin: PropTypes.func,
+};

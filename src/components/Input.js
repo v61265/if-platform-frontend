@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FrontIcon } from "./Image";
-import { AlertText } from "./Text";
+import { Pfc, AlertText } from "./Text";
 import Down from "../svg/down.svg";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -9,23 +9,18 @@ const InputWrapper = styled.div`
   position: relative;
 `;
 
-const StyledInput = styled.input`
+const StyledInput = styled(Pfc)`
   background: ${({ theme }) => theme.color.white};
-  font-size: ${({ theme }) => theme.font.lg}px;
   color: ${({ theme }) => theme.color.black};
   width: 100%;
   border-radius: 10px;
-  padding: ${({ theme }) => `${theme.space.sm}px ${theme.space.sm}px`};
+  padding: ${({ theme }) => theme.space.sm}px;
   box-shadow: ${({ theme }) => theme.shadow};
-  ${({ theme }) => theme.media.sm} {
-    font-size: ${({ theme }) => theme.font.sm}px;
-    padding: ${({ theme }) => `${theme.space.xs - 1}px ${theme.space.xs}px`};
-    padding-left: ${({ theme }) => theme.icon.sm + theme.space.xs * 1.5}px;
-  }
 `;
 
 const StyledIconInput = styled(StyledInput)`
-  padding-left: ${({ theme }) => theme.icon.md + theme.space.sm * 2}px;
+  padding-left: ${({ theme }) =>
+    theme.icon.md + theme.space.sm + theme.font.xs}px;
 `;
 
 export function IconInput({ type, name, placeholder, icon, alert }) {
@@ -36,6 +31,7 @@ export function IconInput({ type, name, placeholder, icon, alert }) {
   return (
     <InputWrapper>
       <StyledIconInput
+        as="input"
         type={type}
         name={name}
         placeholder={placeholder}

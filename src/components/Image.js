@@ -6,37 +6,38 @@ import { ReactComponent as From } from "../svg/from.svg";
 import { ReactComponent as Time } from "../svg/time.svg";
 import { ReactComponent as Email } from "../svg/email.svg";
 import { ReactComponent as Contact } from "../svg/contact.svg";
-import logoImage from "../png/logo_image.png";
-import logo from "../png/logo.png";
-import logoWhite from "../png/logo_white.png";
-import logoBlack from "../png/logo_black.png";
+import { ReactComponent as Instagram } from "../svg/instagram.svg";
+import { ReactComponent as Facebook } from "../svg/facebook.svg";
+import logo from "../svg/logo.svg";
+import logoWhite from "../svg/logo_white.svg";
+import logoBlack from "../svg/logo_black.svg";
 import PropTypes from "prop-types";
 
-export const StyledLogo = styled.h1`
+const StyledLogo = styled.a`
+  display: block;
   text-indent: 101%;
   overflow: hidden;
   white-space: nowrap;
-  background: url(${logo}) center/cover;
-  ${({ image }) => image && `background-image: url(${logoImage});`}
-  ${({ white }) => white && `background-image: url(${logoWhite});`}
-  ${({ black }) => black && `background-image: url(${logoBlack});`}
+  height: 60px;
+  background: url(${logo}) center/contain no-repeat;
+  ${({ white }) =>
+    white && `background: url(${logoWhite}) left/contain no-repeat;`}
+  ${({ black }) =>
+    black && `background: url(${logoBlack}) left/contain no-repeat;`}
 `;
-export function Logo({ image, white, black }) {
-  console.log(image, white, black);
+export function Logo({ white, black }) {
   return (
-    <Logo image white black>
-      <a href="/">想像朋友寫作會</a>
-    </Logo>
+    <StyledLogo href="/" white={white} black={black}>
+      <h1>想像朋友寫作會</h1>
+    </StyledLogo>
   );
 }
 Logo.propTypes = {
-  image: PropTypes.bool,
   white: PropTypes.bool,
   black: PropTypes.bool,
 };
 
 export const StyledIcon = styled.div`
-  fill: ${({ theme }) => theme.color.black};
   display: inline-block;
   width: ${({ theme }) => theme.icon.md}px;
   height: ${({ theme }) => theme.icon.md}px;
@@ -44,19 +45,11 @@ export const StyledIcon = styled.div`
     width: 100%;
     height: auto;
   }
-  ${({ theme }) => theme.media.sm} {
-    width: ${({ theme }) => theme.icon.sm}px;
-    height: ${({ theme }) => theme.icon.sm}px;
-  }
 `;
 const StyledFrontIcon = styled(StyledIcon)`
   position: absolute;
-  top: ${({ theme }) => theme.space.xs + 1}px;
+  top: ${({ theme }) => theme.space.xs}px;
   left: ${({ theme }) => theme.space.sm}px;
-  ${({ theme }) => theme.media.sm} {
-    top: ${({ theme }) => theme.space.xs}px;
-    left: ${({ theme }) => theme.space.xs}px;
-  }
 `;
 export function FrontIcon({ icon }) {
   return (
@@ -73,4 +66,21 @@ export function FrontIcon({ icon }) {
 }
 FrontIcon.propTypes = {
   icon: PropTypes.string,
+};
+
+export const StyledSmallIcon = styled(StyledIcon)`
+  width: ${({ theme }) => theme.icon.sm}px;
+  height: ${({ theme }) => theme.icon.sm}px;
+`;
+export function SocialIcon({ icon, link }) {
+  return (
+    <StyledSmallIcon as="Link" to={link}>
+      {icon === "instagram" && <Instagram />}
+      {icon === "facebook" && <Facebook />}
+    </StyledSmallIcon>
+  );
+}
+SocialIcon.propTypes = {
+  icon: PropTypes.string,
+  link: PropTypes.string,
 };

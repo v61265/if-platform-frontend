@@ -3,20 +3,22 @@ import { StyledIcon } from "../components/Image";
 import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
-import { H4, XXSText } from "./Text";
+import { H4, Pxxs } from "./Text";
 
-const StyledLinkButton = styled.button`
+const StyledLinkButton = styled(Pxxs)`
   color: ${({ theme }) => theme.color.greyDark};
 `;
-export function LinkButton({ text }) {
+export function LinkButton({ text, value, handleOpenModal }) {
   return (
-    <StyledLinkButton>
-      <XXSText>{text}</XXSText>
+    <StyledLinkButton as="button" value={value} onClick={handleOpenModal}>
+      {text}
     </StyledLinkButton>
   );
 }
 LinkButton.propTypes = {
   text: PropTypes.string,
+  value: PropTypes.string,
+  handleOpenModal: PropTypes.func,
 };
 
 const StyledButton = styled(H4)`
@@ -37,15 +39,20 @@ const StyledButton = styled(H4)`
     background: ${({ theme }) => theme.color.secondary};
   }
 `;
-export function Button({ text }) {
-  return <StyledButton as="button">{text}</StyledButton>;
+export function Button({ text, value, handleOnClick }) {
+  return (
+    <StyledButton as="button" value={value} onClick={handleOnClick}>
+      {text}
+    </StyledButton>
+  );
 }
 Button.propTypes = {
   text: PropTypes.string,
+  value: PropTypes.string,
+  handleOnClick: PropTypes.func,
 };
 
 const StyledIconButton = styled.button`
-  background: transparent;
   position: absolute;
   top: ${({ theme }) => theme.space.lg}px;
   right: ${({ theme }) => theme.space.lg}px;
@@ -62,6 +69,15 @@ export function CloseButton({ handleCloseModal }) {
 CloseButton.propTypes = {
   handleCloseModal: PropTypes.func,
 };
+
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > * ~ * {
+    margin-left: ${({ theme }) => theme.space.sm}px;
+  }
+`;
 
 const StyledNavItem = styled(Link)`
   display: inline-block;
