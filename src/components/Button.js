@@ -1,19 +1,25 @@
 import styled from "styled-components";
-import { IconDiv } from "../components/Image";
-import { ReactComponent as Close } from "../Icon/close.svg";
+import { StyledIcon } from "../components/Image";
+import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
+import { H4, XXSText } from "./Text";
 
-export const LinkButton = styled.button`
-  display: block;
-  background: transparent;
-  margin-right: auto;
-  margin-left: auto;
-  color: ${({ theme }) => theme.color.secondary};
-  font-size: ${({ theme }) => theme.font.sm}px;
+const StyledLinkButton = styled.button`
+  color: ${({ theme }) => theme.color.greyDark};
 `;
+export function LinkButton({ text }) {
+  return (
+    <StyledLinkButton>
+      <XXSText>{text}</XXSText>
+    </StyledLinkButton>
+  );
+}
+LinkButton.propTypes = {
+  text: PropTypes.string,
+};
 
-export const Button = styled.button`
+const StyledButton = styled(H4)`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
   width: 100%;
@@ -31,8 +37,14 @@ export const Button = styled.button`
     background: ${({ theme }) => theme.color.secondary};
   }
 `;
+export function Button({ text }) {
+  return <StyledButton as="button">{text}</StyledButton>;
+}
+Button.propTypes = {
+  text: PropTypes.string,
+};
 
-const ButtonDiv = styled.button`
+const StyledIconButton = styled.button`
   background: transparent;
   position: absolute;
   top: ${({ theme }) => theme.space.lg}px;
@@ -40,18 +52,18 @@ const ButtonDiv = styled.button`
 `;
 export function CloseButton({ handleCloseModal }) {
   return (
-    <ButtonDiv onClick={handleCloseModal}>
-      <IconDiv>
+    <StyledIconButton onClick={handleCloseModal}>
+      <StyledIcon>
         <Close />
-      </IconDiv>
-    </ButtonDiv>
+      </StyledIcon>
+    </StyledIconButton>
   );
 }
 CloseButton.propTypes = {
   handleCloseModal: PropTypes.func,
 };
 
-const NavItemWrapper = styled(Link)`
+const StyledNavItem = styled(Link)`
   display: inline-block;
   margin: ${({ theme }) => theme.space.sm}px;
   & button {
@@ -64,9 +76,9 @@ export function NavItem({ to, content }) {
     exact: true,
   });
   return (
-    <NavItemWrapper to={to}>
-      <Button className={match ? "active" : ""}>{content}</Button>
-    </NavItemWrapper>
+    <StyledNavItem to={to}>
+      <Button className={match ? "active" : ""} text={content} />
+    </StyledNavItem>
   );
 }
 NavItem.propTypes = {

@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import { NavItem } from "../Button";
-import PropTypes from "prop-types";
+import { Logo } from "./Image";
+import { NavItem } from "./Button";
 
 const Nav = styled.nav`
   background: ${({ theme }) => theme.color.black};
@@ -17,29 +17,12 @@ const Navbar = styled.div`
   }
 `;
 
-const Name = styled.h1`
-  font-size: ${({ theme }) => theme.font.xl}px;
-  font-weight: normal;
-  color: ${({ theme }) => theme.color.white};
-  margin: ${({ theme }) => theme.space.sm}px;
-`;
-function Brand({ content }) {
-  return (
-    <Name>
-      <a href="/">{content}</a>
-    </Name>
-  );
-}
-Brand.propTypes = {
-  content: PropTypes.string,
-};
-
 export default function Header() {
   const username = "name";
   return (
     <Nav>
       <Navbar>
-        <Brand content={"想像朋友寫作會"} />
+        <Logo white />
         <div>
           <NavItem to={"/"} content={"首頁"} />
           <NavItem to={"/users"} content={"成員列表"} />

@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import { FrontIcon } from "./Image";
 import { AlertText } from "./Text";
-import Down from "../Icon/down.svg";
+import Down from "../svg/down.svg";
 import PropTypes from "prop-types";
 import { useState } from "react";
 
@@ -9,15 +9,13 @@ const InputWrapper = styled.div`
   position: relative;
 `;
 
-const Input = styled.input`
-  background: ${({ theme }) => theme.color.backgroundLight};
+const StyledInput = styled.input`
+  background: ${({ theme }) => theme.color.white};
+  font-size: ${({ theme }) => theme.font.lg}px;
   color: ${({ theme }) => theme.color.black};
   width: 100%;
-  font-size: ${({ theme }) => theme.font.md}px;
-  line-height: 1.5;
   border-radius: 10px;
   padding: ${({ theme }) => `${theme.space.sm}px ${theme.space.sm}px`};
-  padding-left: ${({ theme }) => theme.icon.md + theme.space.sm * 2}px;
   box-shadow: ${({ theme }) => theme.shadow};
   ${({ theme }) => theme.media.sm} {
     font-size: ${({ theme }) => theme.font.sm}px;
@@ -25,6 +23,11 @@ const Input = styled.input`
     padding-left: ${({ theme }) => theme.icon.sm + theme.space.xs * 1.5}px;
   }
 `;
+
+const StyledIconInput = styled(StyledInput)`
+  padding-left: ${({ theme }) => theme.icon.md + theme.space.sm * 2}px;
+`;
+
 export function IconInput({ type, name, placeholder, icon, alert }) {
   const [value, setValue] = useState("");
   const handleOnChange = ({ target }) => {
@@ -32,7 +35,7 @@ export function IconInput({ type, name, placeholder, icon, alert }) {
   };
   return (
     <InputWrapper>
-      <Input
+      <StyledIconInput
         type={type}
         name={name}
         placeholder={placeholder}
@@ -53,24 +56,11 @@ IconInput.propTypes = {
   alert: PropTypes.string,
 };
 
-const Select = styled.select`
-  color: ${({ theme }) => theme.color.black};
-  width: 100%;
-  font-size: ${({ theme }) => theme.font.md}px;
-  line-height: 1.5;
-  border-radius: 10px;
-  padding: ${({ theme }) => `${theme.space.sm}px ${theme.space.sm}px`};
-  padding-left: ${({ theme }) => theme.icon.md + theme.space.sm * 2}px;
+const StyledIconSelect = styled(StyledIconInput)`
   appearance: none;
-  background: ${({ theme }) => theme.color.backgroundLight} url(${Down}) right
-    center no-repeat;
+  background: ${({ theme }) => theme.color.white} url(${Down}) right center
+    no-repeat;
   background-size: ${({ theme }) => theme.icon.md}px;
-  box-shadow: ${({ theme }) => theme.shadow};
-  ${({ theme }) => theme.media.sm} {
-    font-size: ${({ theme }) => theme.font.sm}px;
-    padding: ${({ theme }) => `${theme.space.xs - 1}px ${theme.space.xs}px`};
-    padding-left: ${({ theme }) => theme.icon.sm + theme.space.xs * 1.5}px;
-  }
   &:required:invalid {
     color: gray;
   }
@@ -82,7 +72,13 @@ export function IconSelect({ name, placeholder, icon, options, alert }) {
   };
   return (
     <InputWrapper>
-      <Select name={name} value={value} onChange={handleOnChange} required>
+      <StyledIconSelect
+        as="select"
+        name={name}
+        value={value}
+        onChange={handleOnChange}
+        required
+      >
         <option value="" disabled hidden>
           {placeholder}
         </option>
@@ -91,7 +87,7 @@ export function IconSelect({ name, placeholder, icon, options, alert }) {
             {option.name}
           </option>
         ))}
-      </Select>
+      </StyledIconSelect>
       <FrontIcon icon={icon} />
       {alert && <AlertText>{alert}</AlertText>}
     </InputWrapper>

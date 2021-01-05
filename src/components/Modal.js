@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { Page, PageContainer } from "./Page";
 import { CloseButton, Button } from "./Button";
 import { IconInput, IconSelectInput } from "./Input";
-import { SmallText, Title } from "./Text";
+import { H4, SText, XXSText } from "./Text";
 import PropTypes from "prop-types";
 
 const Mask = styled(Page)`
@@ -12,13 +12,13 @@ const Mask = styled(Page)`
   height: 100vh;
   z-index: 2;
 `;
-const ModalContainer = styled(PageContainer)`
+const StyledModal = styled(PageContainer)`
   width: 600px;
   position: relative;
   margin: auto 0;
 `;
 
-const TextModalContainer = styled(ModalContainer)`
+const StyledTextModal = styled(StyledModal)`
   padding: ${({ theme }) => theme.space.lg + 20}px
     ${({ theme }) => theme.space.lg}px ${({ theme }) => theme.space.xl}px;
   & p {
@@ -28,12 +28,12 @@ const TextModalContainer = styled(ModalContainer)`
 export function TextModal({ content, handleCloseModal }) {
   return (
     <Mask>
-      <TextModalContainer>
+      <StyledTextModal>
         <CloseButton handleCloseModal={handleCloseModal} />
         {content.texts.map((text) => (
-          <SmallText>{text}</SmallText>
+          <SText>{text}</SText>
         ))}
-      </TextModalContainer>
+      </StyledTextModal>
     </Mask>
   );
 }
@@ -46,7 +46,7 @@ TextModal.propTypes = {
   handleCloseModal: PropTypes.func,
 };
 
-const FormModalContainer = styled(ModalContainer)`
+const StyledFormModal = styled(StyledModal)`
   padding: ${({ theme }) => theme.space.lg}px;
   & > *:nth-child(2) ~ * {
     margin-top: ${({ theme }) => theme.space.md}px;
@@ -56,11 +56,10 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
   const failed = true;
   return (
     <Mask>
-      <FormModalContainer>
+      <StyledFormModal>
         <CloseButton handleCloseModal={handleCloseModal} />
-        <Title>{content.title}</Title>
-        <SmallText>{content.description}</SmallText>
-        <SmallText>{content.components.select}</SmallText>
+        <H4>{content.title}</H4>
+        <XXSText>{content.description}</XXSText>
         {content.components.map((component) =>
           component.type === "inputGroup" ? (
             <IconSelectInput
@@ -80,10 +79,12 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
             />
           )
         )}
-        <Button value={content.success} onClick={handleSubmit}>
-          {content.submit}
-        </Button>
-      </FormModalContainer>
+        <Button
+          value={content.success}
+          onClick={handleSubmit}
+          text={content.submit}
+        />
+      </StyledFormModal>
     </Mask>
   );
 }

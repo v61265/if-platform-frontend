@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { LinkButton, Button } from "../components/Button";
 import { IconInput } from "../components/Input";
 import { Logo } from "../components/Image";
-import { MiddleText } from "../components/Text";
+import { SText } from "../components/Text";
 import { TextModal, FormModal } from "../components/Modal";
 import { Page, PageContainer } from "../components/Page";
 import { modalContent, alertText } from "../constants/variable";
@@ -14,6 +14,7 @@ const MaxPage = styled(Page)`
 const LoginPageContainer = styled(PageContainer)`
   display: flex;
   position: relative;
+  text-align: center;
   ${({ theme }) => theme.media.sm} {
     flex-direction: column-reverse;
   }
@@ -30,7 +31,6 @@ const LoginImage = styled(Logo)`
 const LoginForm = styled.div`
   flex: 1 0;
   padding: ${({ theme }) => theme.space.lg}px;
-  text-align: center;
   & > * ~ * {
     margin-top: ${({ theme }) => theme.space.md}px;
   }
@@ -60,7 +60,7 @@ export default function LoginPage() {
   return (
     <MaxPage>
       <LoginPageContainer>
-        <LoginImage>想像朋友寫作會</LoginImage>
+        <LoginImage image>想像朋友寫作會</LoginImage>
         <LoginForm>
           <IconInput type={"text"} placeholder={"你的帳戶"} icon={"username"} />
           <IconInput
@@ -72,15 +72,16 @@ export default function LoginPage() {
           <LinkButton
             value={modalContent.forgetPassword.name}
             onClick={handleOpenModal}
-          >
-            忘記密碼
-          </LinkButton>
+            text={"忘記密碼"}
+          />
           <Button>登入</Button>
           <DashLine />
-          <MiddleText>還沒有帳號嗎？</MiddleText>
-          <Button value={modalContent.register.name} onClick={handleOpenModal}>
-            註冊
-          </Button>
+          <SText>還沒有帳號嗎？</SText>
+          <Button
+            value={modalContent.register.name}
+            onClick={handleOpenModal}
+            text={"註冊"}
+          />
         </LoginForm>
       </LoginPageContainer>
       {Object.keys(isModal).map((modal) => {

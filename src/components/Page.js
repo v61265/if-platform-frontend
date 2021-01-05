@@ -9,7 +9,7 @@ export const Page = styled.div`
 `;
 
 export const PageContainer = styled.div`
-  background: ${({ theme }) => theme.color.backgroundLight};
+  background: ${({ theme }) => theme.color.white + "EE"};
   width: 800px;
   margin: auto 0;
   ${({ theme }) => theme.media.sm} {
