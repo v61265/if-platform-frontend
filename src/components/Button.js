@@ -1,19 +1,27 @@
 import styled from "styled-components";
-import { IconDiv } from "../components/Image";
-import { ReactComponent as Close } from "../Icon/close.svg";
+import { StyledIcon } from "../components/Image";
+import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
+import { H4, Pxxs } from "./Text";
 
-export const LinkButton = styled.button`
-  display: block;
-  background: transparent;
-  margin-right: auto;
-  margin-left: auto;
-  color: ${({ theme }) => theme.color.secondary};
-  font-size: ${({ theme }) => theme.font.sm}px;
+const StyledLinkButton = styled(Pxxs)`
+  color: ${({ theme }) => theme.color.greyDark};
 `;
+export function LinkButton({ text, value, handleOpenModal }) {
+  return (
+    <StyledLinkButton as="button" value={value} onClick={handleOpenModal}>
+      {text}
+    </StyledLinkButton>
+  );
+}
+LinkButton.propTypes = {
+  text: PropTypes.string,
+  value: PropTypes.string,
+  handleOpenModal: PropTypes.func,
+};
 
-export const Button = styled.button`
+const StyledButton = styled(H4)`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
   width: 100%;
@@ -31,27 +39,47 @@ export const Button = styled.button`
     background: ${({ theme }) => theme.color.secondary};
   }
 `;
+export function Button({ text, value, handleOnClick }) {
+  return (
+    <StyledButton as="button" value={value} onClick={handleOnClick}>
+      {text}
+    </StyledButton>
+  );
+}
+Button.propTypes = {
+  text: PropTypes.string,
+  value: PropTypes.string,
+  handleOnClick: PropTypes.func,
+};
 
-const ButtonDiv = styled.button`
-  background: transparent;
+const StyledIconButton = styled.button`
   position: absolute;
   top: ${({ theme }) => theme.space.lg}px;
   right: ${({ theme }) => theme.space.lg}px;
 `;
 export function CloseButton({ handleCloseModal }) {
   return (
-    <ButtonDiv onClick={handleCloseModal}>
-      <IconDiv>
+    <StyledIconButton onClick={handleCloseModal}>
+      <StyledIcon>
         <Close />
-      </IconDiv>
-    </ButtonDiv>
+      </StyledIcon>
+    </StyledIconButton>
   );
 }
 CloseButton.propTypes = {
   handleCloseModal: PropTypes.func,
 };
 
-const NavItemWrapper = styled(Link)`
+export const ButtonGroup = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  & > * ~ * {
+    margin-left: ${({ theme }) => theme.space.sm}px;
+  }
+`;
+
+const StyledNavItem = styled(Link)`
   display: inline-block;
   margin: ${({ theme }) => theme.space.sm}px;
   & button {
@@ -64,9 +92,9 @@ export function NavItem({ to, content }) {
     exact: true,
   });
   return (
-    <NavItemWrapper to={to}>
-      <Button className={match ? "active" : ""}>{content}</Button>
-    </NavItemWrapper>
+    <StyledNavItem to={to}>
+      <Button className={match ? "active" : ""} text={content} />
+    </StyledNavItem>
   );
 }
 NavItem.propTypes = {

@@ -1,23 +1,43 @@
 import styled from "styled-components";
-import { ReactComponent as Username } from "../Icon/username.svg";
-import { ReactComponent as Password } from "../Icon/password.svg";
-import { ReactComponent as Nickname } from "../Icon/nickname.svg";
-import { ReactComponent as From } from "../Icon/from.svg";
-import { ReactComponent as Time } from "../Icon/time.svg";
-import { ReactComponent as Email } from "../Icon/email.svg";
-import { ReactComponent as Contact } from "../Icon/contact.svg";
-import logo from "../Image/logo.png";
+import { ReactComponent as Username } from "../svg/username.svg";
+import { ReactComponent as Password } from "../svg/password.svg";
+import { ReactComponent as Nickname } from "../svg/nickname.svg";
+import { ReactComponent as From } from "../svg/from.svg";
+import { ReactComponent as Time } from "../svg/time.svg";
+import { ReactComponent as Email } from "../svg/email.svg";
+import { ReactComponent as Contact } from "../svg/contact.svg";
+import { ReactComponent as Instagram } from "../svg/instagram.svg";
+import { ReactComponent as Facebook } from "../svg/facebook.svg";
+import logo from "../svg/logo.svg";
+import logoWhite from "../svg/logo_white.svg";
+import logoBlack from "../svg/logo_black.svg";
 import PropTypes from "prop-types";
 
-export const Logo = styled.h1`
-  background: url(${logo}) center/cover;
+const StyledLogo = styled.a`
+  display: block;
   text-indent: 101%;
   overflow: hidden;
   white-space: nowrap;
+  height: 60px;
+  background: url(${logo}) center/contain no-repeat;
+  ${({ white }) =>
+    white && `background: url(${logoWhite}) left/contain no-repeat;`}
+  ${({ black }) =>
+    black && `background: url(${logoBlack}) left/contain no-repeat;`}
 `;
+export function Logo({ white, black }) {
+  return (
+    <StyledLogo href="/" white={white} black={black}>
+      <h1>想像朋友寫作會</h1>
+    </StyledLogo>
+  );
+}
+Logo.propTypes = {
+  white: PropTypes.bool,
+  black: PropTypes.bool,
+};
 
-export const IconDiv = styled.div`
-  fill: ${({ theme }) => theme.color.black};
+export const StyledIcon = styled.div`
   display: inline-block;
   width: ${({ theme }) => theme.icon.md}px;
   height: ${({ theme }) => theme.icon.md}px;
@@ -25,25 +45,15 @@ export const IconDiv = styled.div`
     width: 100%;
     height: auto;
   }
-  ${({ theme }) => theme.media.sm} {
-    width: ${({ theme }) => theme.icon.sm}px;
-    height: ${({ theme }) => theme.icon.sm}px;
-  }
 `;
-
-const FrontIconDiv = styled(IconDiv)`
-  fill: ${({ theme }) => theme.color.secondary};
+const StyledFrontIcon = styled(StyledIcon)`
   position: absolute;
-  top: ${({ theme }) => theme.space.sm + 1}px;
+  top: ${({ theme }) => theme.space.xs}px;
   left: ${({ theme }) => theme.space.sm}px;
-  ${({ theme }) => theme.media.sm} {
-    top: ${({ theme }) => theme.space.xs}px;
-    left: ${({ theme }) => theme.space.xs}px;
-  }
 `;
 export function FrontIcon({ icon }) {
   return (
-    <FrontIconDiv>
+    <StyledFrontIcon>
       {icon === "username" && <Username />}
       {icon === "password" && <Password />}
       {icon === "nickname" && <Nickname />}
@@ -51,9 +61,26 @@ export function FrontIcon({ icon }) {
       {icon === "from" && <From />}
       {icon === "email" && <Email />}
       {icon === "contact" && <Contact />}
-    </FrontIconDiv>
+    </StyledFrontIcon>
   );
 }
 FrontIcon.propTypes = {
   icon: PropTypes.string,
+};
+
+export const StyledSmallIcon = styled(StyledIcon)`
+  width: ${({ theme }) => theme.icon.sm}px;
+  height: ${({ theme }) => theme.icon.sm}px;
+`;
+export function SocialIcon({ icon, link }) {
+  return (
+    <StyledSmallIcon as="Link" to={link}>
+      {icon === "instagram" && <Instagram />}
+      {icon === "facebook" && <Facebook />}
+    </StyledSmallIcon>
+  );
+}
+SocialIcon.propTypes = {
+  icon: PropTypes.string,
+  link: PropTypes.string,
 };

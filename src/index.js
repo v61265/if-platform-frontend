@@ -2,33 +2,39 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-import store from "./redux/store";
-import { Provider } from "react-redux";
+// import store from "./redux/store";
+// import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import * as serviceWorker from "./serviceWorker";
 
 const theme = {
   color: {
     primary: "#F9ADAD",
-    secondary: "#AAAAAA",
-    secondaryLight: "#E5E5E5",
-    mask: "#AAAAAA66",
-    textLighter: "#CFCFCF",
-    textLight: "#C4C4C4",
-    textDark: "#656565",
-    alert: "#B62020",
-    backgroundDark: "#F4F4F4",
-    background: "#F1F0F0",
-    backgroundLight: "#FFFFFFE6",
+    primaryLight: "#FAE0E0",
+    primaryDark: "#BB8080",
+    secondary: "#212121",
+    secondaryLight: "#48484848",
+    secondaryDark: "#212121",
     white: "#FEFEFE",
-    black: "#2B2B2B",
+    black: "#000000",
+    grey: "#C4C4C4",
+    greyLight: "#E5E5E5",
+    greyDark: "#656565",
+    alert: "#FF0000",
+    background: "#F1F0F0",
+    backgroundIfLight: "#F56F6F",
+    backgroundIfDark: "#F05454",
+    mask: "#21212166",
   },
   font: {
-    xs: 12,
-    sm: 16,
-    md: 24,
-    lg: 32,
-    xl: 40,
+    xxs: 14,
+    xs: 16,
+    sm: 18,
+    md: 20,
+    lg: 22,
+    xl: 24,
+    xxl: 30,
+    xxxl: 40,
   },
   space: {
     xxs: 4,
@@ -50,9 +56,9 @@ const theme = {
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    {/* <Provider store={store}> */}
+    <App />
+    {/* </Provider> */}
   </ThemeProvider>,
   document.getElementById("root")
 );
