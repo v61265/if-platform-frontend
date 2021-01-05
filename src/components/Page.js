@@ -16,8 +16,8 @@ export const PageContainer = styled.div`
   background: ${({ theme }) => theme.color.white + "EE"};
   width: 800px;
   margin: auto 0;
+  box-shadow: ${({ theme }) => theme.shadow};
   ${({ theme }) => theme.media.sm} {
     width: 100%;
   }
-  box-shadow: ${({ theme }) => theme.shadow};
 `;
