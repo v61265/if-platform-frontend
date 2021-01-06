@@ -14,7 +14,19 @@ function App() {
       <Header isLogin={isLogin} />
       <Switch>
         <Route path="/">
-          {isLogin ? <h1>home</h1> : <LoginPage handleLogin={handleLogin} />}
+          {isLogin ? (
+            <h1
+              style={{
+                paddingTop: "100vh",
+                background: "white",
+                display: "block",
+              }}
+            >
+              home
+            </h1>
+          ) : (
+            <LoginPage handleLogin={handleLogin} />
+          )}
         </Route>
       </Switch>
       <Footer />

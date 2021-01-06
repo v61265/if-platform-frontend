@@ -3,7 +3,7 @@ import { StyledIcon } from "../components/Image";
 import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
-import { H4, Pxxs } from "./Text";
+import { H4, Pxs, Pxxs } from "./Text";
 
 const StyledLinkButton = styled(Pxxs)`
   color: ${({ theme }) => theme.color.greyDark};
@@ -25,7 +25,6 @@ const StyledButton = styled(H4)`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
   width: 100%;
-  font-size: ${({ theme }) => theme.font.md}px;
   border-radius: 10px;
   padding: ${({ theme }) => theme.space.sm}px;
   box-shadow: ${({ theme }) => theme.shadow};
@@ -39,6 +38,26 @@ const StyledButton = styled(H4)`
     background: ${({ theme }) => theme.color.secondary};
   }
 `;
+
+const StyledNavButton = styled(Pxs)`
+  background: ${({ theme }) => theme.color.black};
+  color: ${({ theme }) => theme.color.white};
+  width: 100%;
+  min-width: 80px;
+  border-radius: 10px;
+  padding: 7px 5px;
+  box-shadow: ${({ theme }) => theme.shadow};
+  transition: all 0.3s ease-in-out;
+  ${({ theme }) => theme.media.sm} {
+    font-size: ${({ theme }) => theme.font.sm}px;
+  }
+  &:hover,
+  &.active,
+  &:focus {
+    background: ${({ theme }) => theme.color.secondary};
+  }
+`;
+
 export function Button({ text, value, handleOnClick }) {
   return (
     <StyledButton as="button" value={value} onClick={handleOnClick}>
@@ -47,6 +66,19 @@ export function Button({ text, value, handleOnClick }) {
   );
 }
 Button.propTypes = {
+  text: PropTypes.string,
+  value: PropTypes.string,
+  handleOnClick: PropTypes.func,
+};
+
+export function NavButton({ text, value, handleOnClick }) {
+  return (
+    <StyledNavButton as="button" value={value} onClick={handleOnClick}>
+      {text}
+    </StyledNavButton>
+  );
+}
+NavButton.propTypes = {
   text: PropTypes.string,
   value: PropTypes.string,
   handleOnClick: PropTypes.func,
@@ -93,7 +125,7 @@ export function NavItem({ to, content }) {
   });
   return (
     <StyledNavItem to={to}>
-      <Button className={match ? "active" : ""} text={content} />
+      <NavButton className={match ? "active" : ""} text={content} />
     </StyledNavItem>
   );
 }

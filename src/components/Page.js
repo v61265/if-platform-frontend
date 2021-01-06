@@ -10,6 +10,7 @@ export const Page = styled.div`
   ${({ theme }) => theme.media.sm} {
     padding: 0;
   }
+  margin-top: 65px;
 `;
 
 export const PageContainer = styled.div`
