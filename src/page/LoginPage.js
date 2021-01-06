@@ -2,12 +2,19 @@ import styled from "styled-components";
 import { LinkButton, Button } from "../components/Button";
 import { IconInput } from "../components/Input";
 import logoImage from "../png/logo_image.png";
-import { Ps } from "../components/Text";
+import { AlertText, Ps } from "../components/Text";
 import { TextModal, FormModal } from "../components/Modal";
 import { Page, PageContainer } from "../components/Page";
-import { modalContent, alertText } from "../constants/variable";
+import { modalContent } from "../constants/variable";
 import { useState } from "react";
-import PropTypes from "prop-types";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  getMe,
+  selectUserStatus,
+  selectUserError,
+} from "../redux/reducer/userSlice";
+import { getAuthToken, setAuthToken } from "../utils";
+import { useHistory } from "react-router-dom";
 
 const LoginPageContainer = styled(PageContainer)`
   display: flex;
@@ -44,7 +51,25 @@ const DashLine = styled.hr`
 const initIsModal = {};
 Object.keys(modalContent).map((modal) => (initIsModal[modal] = false));
 
-export default function LoginPage({ handleLogin }) {
+export default function LoginPage() {
+  const dispatch = useDispatch();
+  const status = useSelector(selectUserStatus);
+  // const isLoading = useSelector(selectUserIsLoading);
+  const errorMessage = useSelector(selectUserError);
+  const history = useHistory();
+  const [formData, setFormData] = useState({
+    goal: "login",
+    username: "",
+    password: "",
+  });
+  const handleFormData = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+  };
+  const handleGetMe = () => {
+    dispatch(getMe(formData));
+    if (status.login === "suceeded") return history.push("/");
+    if (getAuthToken()) setAuthToken(null);
+  };
   const [isModal, setIsModal] = useState(initIsModal);
   const handleOpenModal = ({ target }) => {
     setIsModal({ ...isModal, [target.value]: true });
@@ -55,26 +80,35 @@ export default function LoginPage({ handleLogin }) {
   const handleSubmit = ({ target }) => {
     alert(target.value + " submit");
     handleCloseModal({ target });
-    handleLogin();
   };
   return (
     <Page>
       <LoginPageContainer>
         <LoginImage src={logoImage} alt="想像朋友寫作會" />
         <LoginForm>
-          <IconInput type={"text"} placeholder={"你的帳戶"} icon={"username"} />
           <IconInput
             type={"text"}
+            name={"username"}
+            placeholder={"你的帳戶"}
+            icon={"username"}
+            value={formData.username}
+            handleFormData={handleFormData}
+          />
+          <IconInput
+            type={"text"}
+            name={"password"}
             placeholder={"你的密碼"}
             icon={"password"}
-            alert={true ? alertText.usernamePasswordIncorrect : ""}
+            value={formData.password}
+            handleFormData={handleFormData}
           />
           <LinkButton
             text={"忘記密碼"}
             value={modalContent.forgetPassword.name}
             handleOnClick={handleOpenModal}
           />
-          <Button text={"登入"} />
+          <AlertText>{status.login === "failed" ? errorMessage : ""}</AlertText>
+          <Button text={"登入"} value={"login"} handleOnClick={handleGetMe} />
           <DashLine />
           <Ps>還沒有帳號嗎？</Ps>
           <Button
@@ -90,7 +124,9 @@ export default function LoginPage({ handleLogin }) {
           return (
             <FormModal
               key={modal}
+              status={status[modal]}
               content={modalContent[modal]}
+              errorMessage={errorMessage}
               handleCloseModal={handleCloseModal}
               handleSubmit={handleSubmit}
             />
@@ -106,6 +142,3 @@ export default function LoginPage({ handleLogin }) {
     </Page>
   );
 }
-LoginPage.propTypes = {
-  handleLogin: PropTypes.func,
-};

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { FrontIcon } from "./Image";
-import { Pfc, AlertText } from "./Text";
+import { Pfc } from "./Text";
 import Down from "../svg/down.svg";
 import PropTypes from "prop-types";
 import { useState } from "react";
@@ -13,10 +13,6 @@ const StyledInput = styled(Pfc)`
   background: ${({ theme }) => theme.color.white};
   color: ${({ theme }) => theme.color.black};
   width: 100%;
-<<<<<<< HEAD
-  font-size: ${({ theme }) => theme.font.md}px;
-=======
->>>>>>> develop
   border-radius: 10px;
   padding: ${({ theme }) => theme.space.sm}px;
   box-shadow: ${({ theme }) => theme.shadow};
@@ -27,10 +23,16 @@ const StyledIconInput = styled(StyledInput)`
     theme.icon.md + theme.space.sm + theme.font.xs}px;
 `;
 
-export function IconInput({ type, name, placeholder, icon, alert }) {
-  const [value, setValue] = useState("");
+export function IconInput({
+  type,
+  name,
+  placeholder,
+  icon,
+  value,
+  handleFormData,
+}) {
   const handleOnChange = ({ target }) => {
-    setValue(target.value);
+    handleFormData(name, target.value);
   };
   return (
     <InputWrapper>
@@ -44,7 +46,6 @@ export function IconInput({ type, name, placeholder, icon, alert }) {
         required
       />
       <FrontIcon icon={icon} />
-      {alert && <AlertText>{alert}</AlertText>}
     </InputWrapper>
   );
 }
@@ -53,7 +54,8 @@ IconInput.propTypes = {
   name: PropTypes.string,
   placeholder: PropTypes.string,
   icon: PropTypes.string,
-  alert: PropTypes.string,
+  value: PropTypes.string,
+  handleFormData: PropTypes.func,
 };
 
 const StyledIconSelect = styled(StyledIconInput)`
@@ -65,10 +67,16 @@ const StyledIconSelect = styled(StyledIconInput)`
     color: gray;
   }
 `;
-export function IconSelect({ name, placeholder, icon, options, alert }) {
-  const [value, setValue] = useState("");
+export function IconSelect({
+  name,
+  placeholder,
+  icon,
+  options,
+  value,
+  handleFormData,
+}) {
   const handleOnChange = ({ target }) => {
-    setValue(target.value);
+    handleFormData(name, target.value);
   };
   return (
     <InputWrapper>
@@ -89,7 +97,6 @@ export function IconSelect({ name, placeholder, icon, options, alert }) {
         ))}
       </StyledIconSelect>
       <FrontIcon icon={icon} />
-      {alert && <AlertText>{alert}</AlertText>}
     </InputWrapper>
   );
 }
@@ -98,7 +105,8 @@ IconSelect.propTypes = {
   name: PropTypes.string,
   icon: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-  alert: PropTypes.string,
+  value: PropTypes.string,
+  handleFormData: PropTypes.func,
 };
 
 const InputGroup = styled.div`
@@ -119,7 +127,26 @@ const InputGroup = styled.div`
     }
   }
 `;
-export function IconSelectInput({ select, input, alert }) {
+export function IconSelectInput({
+  name,
+  select,
+  input,
+  value,
+  handleFormData,
+}) {
+  const [valueGroup, setValueGroup] = useState({
+    [select.name]: value.slice(0, 2),
+    [input.name]: value.slice(3),
+  });
+  const handleValueGroup = (key, value) => {
+    setValueGroup({ ...valueGroup, [key]: value });
+    if (Object.values(valueGroup).some((item) => item !== "")) {
+      handleFormData(
+        name,
+        `${valueGroup[select.name]}_${valueGroup[input.name]}`
+      );
+    }
+  };
   return (
     <InputGroup>
       <IconSelect
@@ -127,20 +154,22 @@ export function IconSelectInput({ select, input, alert }) {
         placeholder={select.placeholder}
         icon={select.icon}
         options={select.options}
-        alert={""}
+        value={valueGroup[select.name]}
+        handleFormData={handleValueGroup}
       />
       <IconInput
         type={input.type}
         name={input.name}
         placeholder={input.placeholder}
         icon={input.icon}
-        alert={""}
+        value={valueGroup[input.name]}
+        handleFormData={handleValueGroup}
       />
-      {alert && <AlertText>{alert}</AlertText>}
     </InputGroup>
   );
 }
 IconSelectInput.propTypes = {
+  name: PropTypes.string,
   select: PropTypes.shape({
     placeholder: PropTypes.string,
     name: PropTypes.string,
@@ -153,5 +182,6 @@ IconSelectInput.propTypes = {
     name: PropTypes.string,
     icon: PropTypes.string,
   }),
-  alert: PropTypes.string,
+  value: PropTypes.string,
+  handleFormData: PropTypes.func,
 };

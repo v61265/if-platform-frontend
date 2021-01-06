@@ -2,8 +2,17 @@ import styled from "styled-components";
 import { Page, PageContainer } from "./Page";
 import { CloseButton, Button } from "./Button";
 import { IconInput, IconSelectInput } from "./Input";
-import { H4, Ps, Pxxs } from "./Text";
+import { H4, Ps, Pxxs, AlertText } from "./Text";
 import PropTypes from "prop-types";
+import { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
+import {
+  getMe,
+  selectUserStatus,
+  selectUserError,
+} from "../redux/reducer/userSlice";
+import { getAuthToken, setAuthToken } from "../utils";
 
 const Mask = styled(Page)`
   background: ${({ theme }) => theme.color.mask};
@@ -53,8 +62,68 @@ const StyledFormModal = styled(StyledModal)`
     margin-top: ${({ theme }) => theme.space.md}px;
   }
 `;
-export function FormModal({ content, handleCloseModal, handleSubmit }) {
-  const failed = true;
+
+// test register
+// const registerInitState = {
+//   goal: "register",
+//   username: "test",
+//   password: "test",
+//   passwordAgain: "test",
+//   nickname: "test",
+//   email: "test",
+//   session: "gs_1",
+//   contact: "test",
+// };
+
+const registerInitState = {
+  goal: "register",
+  username: "",
+  password: "",
+  passwordAgain: "",
+  nickname: "",
+  email: "",
+  session: "",
+  contact: "",
+};
+
+const resetPasswordInitState = {
+  goal: "resetPassword",
+  oldPassword: "",
+  newPassword: "",
+  againPassword: "",
+};
+
+const forgetPasswordInitState = {
+  goal: "forgetPassword",
+  email: "",
+  newPassword: "",
+  againPassword: "",
+};
+
+export function FormModal({ content, handleCloseModal }) {
+  const dispatch = useDispatch();
+  const status = useSelector(selectUserStatus);
+  // const isLoading = useSelector(selectUserIsLoading);
+  const errorMessage = useSelector(selectUserError);
+  const history = useHistory();
+  const [formData, setFormData] = useState(
+    content.name === registerInitState.goal
+      ? registerInitState
+      : content.name === forgetPasswordInitState.goal
+      ? forgetPasswordInitState
+      : content.name === resetPasswordInitState.goal
+      ? resetPasswordInitState
+      : {}
+  );
+  const handleFormData = (key, value) => {
+    setFormData({ ...formData, [key]: value });
+  };
+  const handleSubmit = () => {
+    console.log(formData);
+    dispatch(getMe(formData));
+    if (status[formData.goal] === "suceeded") return history.push("/");
+    if (getAuthToken()) setAuthToken(null);
+  };
   return (
     <Mask>
       <StyledFormModal>
@@ -64,10 +133,12 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
         {content.components.map((component) =>
           component.type === "inputGroup" ? (
             <IconSelectInput
-              key={component.select.name}
+              key={component.name}
+              name={component.name}
               select={component.select}
               input={component.input}
-              alert={failed ? component.alert : ""}
+              value={formData[component.name]}
+              handleFormData={handleFormData}
             />
           ) : (
             <IconInput
@@ -76,10 +147,14 @@ export function FormModal({ content, handleCloseModal, handleSubmit }) {
               name={component.name}
               placeholder={component.placeholder}
               icon={component.icon}
-              alert={failed ? component.alert : ""}
+              value={formData[component.name]}
+              handleFormData={handleFormData}
             />
           )
         )}
+        <AlertText>
+          {status[formData.goal] === "failed" ? errorMessage : ""}
+        </AlertText>
         <Button
           value={content.success}
           handleOnClick={handleSubmit}
@@ -100,5 +175,4 @@ FormModal.propTypes = {
     success: PropTypes.string,
   }),
   handleCloseModal: PropTypes.func,
-  handleSubmit: PropTypes.func,
 };

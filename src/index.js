@@ -2,8 +2,8 @@ import React from "react";
 import ReactDOM from "react-dom";
 import "./index.css";
 import App from "./App";
-// import store from "./redux/store";
-// import { Provider } from "react-redux";
+import store from "./redux/store";
+import { Provider } from "react-redux";
 import { ThemeProvider } from "styled-components";
 import * as serviceWorker from "./serviceWorker";
 
@@ -56,9 +56,9 @@ const theme = {
 
 ReactDOM.render(
   <ThemeProvider theme={theme}>
-    {/* <Provider store={store}> */}
-    <App />
-    {/* </Provider> */}
+    <Provider store={store}>
+      <App />
+    </Provider>
   </ThemeProvider>,
   document.getElementById("root")
 );

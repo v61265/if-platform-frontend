@@ -1,12 +1,5 @@
 export const TOKEN_NAME = "token";
 
-export const alertText = {
-  usernamePasswordIncorrect: "* 帳密輸入錯誤，請重新輸入！",
-  passwordIncorrect: "* 密碼錯了喔，再確認一次吧！",
-  usernameRepeat: "* 帳號重複了，再想一個吧！",
-  freeze: "* 帳號凍結中，請聯絡管理員！",
-};
-
 export const modalContent = {
   register: {
     name: "register",
@@ -19,7 +12,6 @@ export const modalContent = {
         name: "username",
         placeholder: "設定帳號（無法再更改）",
         icon: "username",
-        alert: alertText.usernameRepeat,
       },
       {
         type: "password",
@@ -29,10 +21,9 @@ export const modalContent = {
       },
       {
         type: "password",
-        name: "checkPassword",
+        name: "passwordAgain",
         placeholder: "請再輸入一次密碼",
         icon: "password",
-        alert: alertText.passwordIncorrect,
       },
       {
         type: "text",
@@ -42,13 +33,14 @@ export const modalContent = {
       },
       {
         type: "inputGroup",
+        name: "session",
         select: {
           name: "from",
           placeholder: "選擇",
           icon: "from",
           options: [
-            { value: "1", name: "耕莘" },
-            { value: "2", name: "想像朋友" },
+            { value: "gs", name: "耕莘" },
+            { value: "if", name: "想像朋友" },
           ],
         },
         input: {
@@ -98,16 +90,15 @@ export const modalContent = {
       },
       {
         type: "password",
-        name: "password",
+        name: "newPassword",
         placeholder: "輸入新密碼",
         icon: "password",
       },
       {
         type: "password",
-        name: "checkPassword",
+        name: "againPassword",
         placeholder: "請再輸入一次密碼",
         icon: "password",
-        alert: alertText.passwordIncorrect,
       },
     ],
     submit: "確認更改密碼",
@@ -128,16 +119,15 @@ export const modalContent = {
       },
       {
         type: "password",
-        name: "password",
+        name: "newPassword",
         placeholder: "輸入新密碼",
         icon: "password",
       },
       {
         type: "password",
-        name: "checkPassword",
+        name: "againPassword",
         placeholder: "請再輸入一次密碼",
         icon: "password",
-        alert: alertText.passwordIncorrect,
       },
     ],
     submit: "確認更改密碼",

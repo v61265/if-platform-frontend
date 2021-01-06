@@ -74,7 +74,7 @@ export const StyledSmallIcon = styled(StyledIcon)`
 `;
 export function SocialIcon({ icon, link }) {
   return (
-    <StyledSmallIcon as="Link" to={link}>
+    <StyledSmallIcon as="a" href={link}>
       {icon === "instagram" && <Instagram />}
       {icon === "facebook" && <Facebook />}
     </StyledSmallIcon>
