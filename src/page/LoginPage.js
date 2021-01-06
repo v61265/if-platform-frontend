@@ -10,6 +10,7 @@ import { useState } from "react";
 import PropTypes from "prop-types";
 
 const LoginPageContainer = styled(PageContainer)`
+  max-width: 619px;
   display: flex;
   position: relative;
   text-align: center;

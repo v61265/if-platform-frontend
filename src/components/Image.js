@@ -18,7 +18,8 @@ const StyledLogo = styled.a`
   text-indent: 101%;
   overflow: hidden;
   white-space: nowrap;
-  height: 60px;
+  height: 40px;
+  font-size: 12px;
   background: url(${logo}) center/contain no-repeat;
   ${({ white }) =>
     white && `background: url(${logoWhite}) left/contain no-repeat;`}

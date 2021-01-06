@@ -4,6 +4,7 @@ import { ButtonGroup } from "./Button";
 import { SocialIcon } from "./Image";
 
 const StyledFooter = styled.footer`
+  width: 100%;
   background: url(${bg}) center 78px / cover no-repeat,
     ${({ theme }) => theme.color.black};
   height: 200px;
