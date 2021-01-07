@@ -21,7 +21,7 @@ LinkButton.propTypes = {
   handleOnClick: PropTypes.func,
 };
 
-const StyledButton = styled(H4)`
+export const StyledButton = styled(H4)`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
   width: 100%;

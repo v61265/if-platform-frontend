@@ -7,12 +7,12 @@ import LoginPage from "./page/LoginPage";
 import { selectMe } from "./redux/reducer/userSlice";
 
 function App() {
-  const isLogin = useSelector(selectMe) ? true : false;
+  const me = useSelector(selectMe);
   return (
     <Router>
-      <Header isLogin={isLogin} />
+      <Header isLogin={me ? true : false} />
       <Switch>
-        <Route path="/">{isLogin ? <h1>home</h1> : <LoginPage />}</Route>
+        <Route path="/">{me ? <h1>home</h1> : <LoginPage />}</Route>
       </Switch>
       <Footer />
     </Router>

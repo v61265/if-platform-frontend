@@ -3,7 +3,6 @@ import { FrontIcon } from "./Image";
 import { Pfc } from "./Text";
 import Down from "../svg/down.svg";
 import PropTypes from "prop-types";
-import { useState } from "react";
 
 const InputWrapper = styled.div`
   position: relative;
@@ -29,10 +28,10 @@ export function IconInput({
   placeholder,
   icon,
   value,
-  handleFormData,
+  handleValue,
 }) {
   const handleOnChange = ({ target }) => {
-    handleFormData(name, target.value);
+    handleValue(target.name, target.value);
   };
   return (
     <InputWrapper>
@@ -55,7 +54,7 @@ IconInput.propTypes = {
   placeholder: PropTypes.string,
   icon: PropTypes.string,
   value: PropTypes.string,
-  handleFormData: PropTypes.func,
+  handleValue: PropTypes.func,
 };
 
 const StyledIconSelect = styled(StyledIconInput)`
@@ -73,10 +72,10 @@ export function IconSelect({
   icon,
   options,
   value,
-  handleFormData,
+  handleValue,
 }) {
   const handleOnChange = ({ target }) => {
-    handleFormData(name, target.value);
+    handleValue(target.name, target.value);
   };
   return (
     <InputWrapper>
@@ -106,82 +105,5 @@ IconSelect.propTypes = {
   icon: PropTypes.string,
   options: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
   value: PropTypes.string,
-  handleFormData: PropTypes.func,
-};
-
-const InputGroup = styled.div`
-  display: flex;
-  & > div:first-of-type {
-    flex-basis: 40%;
-  }
-  & > div ~ div {
-    margin-left: ${({ theme }) => theme.font.sm}px;
-  }
-  ${({ theme }) => theme.media.sm} {
-    & {
-      flex-direction: column;
-    }
-    & > div ~ div {
-      margin-left: 0;
-      margin-top: ${({ theme }) => theme.space.md}px;
-    }
-  }
-`;
-export function IconSelectInput({
-  name,
-  select,
-  input,
-  value,
-  handleFormData,
-}) {
-  const [valueGroup, setValueGroup] = useState({
-    [select.name]: value.slice(0, 2),
-    [input.name]: value.slice(3),
-  });
-  const handleValueGroup = (key, value) => {
-    setValueGroup({ ...valueGroup, [key]: value });
-    if (Object.values(valueGroup).some((item) => item !== "")) {
-      handleFormData(
-        name,
-        `${valueGroup[select.name]}_${valueGroup[input.name]}`
-      );
-    }
-  };
-  return (
-    <InputGroup>
-      <IconSelect
-        name={select.name}
-        placeholder={select.placeholder}
-        icon={select.icon}
-        options={select.options}
-        value={valueGroup[select.name]}
-        handleFormData={handleValueGroup}
-      />
-      <IconInput
-        type={input.type}
-        name={input.name}
-        placeholder={input.placeholder}
-        icon={input.icon}
-        value={valueGroup[input.name]}
-        handleFormData={handleValueGroup}
-      />
-    </InputGroup>
-  );
-}
-IconSelectInput.propTypes = {
-  name: PropTypes.string,
-  select: PropTypes.shape({
-    placeholder: PropTypes.string,
-    name: PropTypes.string,
-    icon: PropTypes.string,
-    options: PropTypes.arrayOf(PropTypes.objectOf(PropTypes.string)),
-  }),
-  input: PropTypes.shape({
-    type: PropTypes.string,
-    placeholder: PropTypes.string,
-    name: PropTypes.string,
-    icon: PropTypes.string,
-  }),
-  value: PropTypes.string,
-  handleFormData: PropTypes.func,
+  handleValue: PropTypes.func,
 };

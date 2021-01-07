@@ -1,23 +1,16 @@
 import styled from "styled-components";
 import { LinkButton, Button } from "../components/Button";
-import { IconInput } from "../components/Input";
 import logoImage from "../png/logo_image.png";
-import { AlertText, Ps } from "../components/Text";
+import { Ps } from "../components/Text";
 import { TextModal, FormModal } from "../components/Modal";
 import { Page, PageContainer } from "../components/Page";
-import { modalContent } from "../constants/variable";
+import { formContent, textModalContent } from "../constants/variable";
 import { useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import {
-  getMe,
-  selectUserStatus,
-  selectUserError,
-} from "../redux/reducer/userSlice";
-import { getAuthToken, setAuthToken } from "../utils";
-import { useHistory } from "react-router-dom";
+import { IconForm } from "../components/Form";
 
 const LoginPageContainer = styled(PageContainer)`
   display: flex;
+  align-items: center;
   position: relative;
   text-align: center;
   ${({ theme }) => theme.media.sm} {
@@ -33,7 +26,7 @@ const LoginImage = styled.img`
   }
 `;
 
-const LoginForm = styled.div`
+const LoginDiv = styled.div`
   flex: 1 0;
   padding: ${({ theme }) => theme.space.lg}px;
   & > * ~ * {
@@ -48,28 +41,14 @@ const DashLine = styled.hr`
   border-top: 1px dotted ${({ theme }) => theme.color.secondary};
 `;
 
-const initIsModal = {};
-Object.keys(modalContent).map((modal) => (initIsModal[modal] = false));
+const initIsModal = {
+  register: false,
+  registerSuccess: false,
+  forgetPassword: false,
+  resetSuccess: false,
+};
 
 export default function LoginPage() {
-  const dispatch = useDispatch();
-  const status = useSelector(selectUserStatus);
-  // const isLoading = useSelector(selectUserIsLoading);
-  const errorMessage = useSelector(selectUserError);
-  const history = useHistory();
-  const [formData, setFormData] = useState({
-    goal: "login",
-    username: "",
-    password: "",
-  });
-  const handleFormData = (key, value) => {
-    setFormData({ ...formData, [key]: value });
-  };
-  const handleGetMe = () => {
-    dispatch(getMe(formData));
-    if (status.login === "suceeded") return history.push("/");
-    if (getAuthToken()) setAuthToken(null);
-  };
   const [isModal, setIsModal] = useState(initIsModal);
   const handleOpenModal = ({ target }) => {
     setIsModal({ ...isModal, [target.value]: true });
@@ -77,64 +56,41 @@ export default function LoginPage() {
   const handleCloseModal = () => {
     setIsModal(initIsModal);
   };
-  const handleSubmit = ({ target }) => {
-    alert(target.value + " submit");
-    handleCloseModal({ target });
-  };
   return (
     <Page>
       <LoginPageContainer>
         <LoginImage src={logoImage} alt="想像朋友寫作會" />
-        <LoginForm>
-          <IconInput
-            type={"text"}
-            name={"username"}
-            placeholder={"你的帳戶"}
-            icon={"username"}
-            value={formData.username}
-            handleFormData={handleFormData}
-          />
-          <IconInput
-            type={"text"}
-            name={"password"}
-            placeholder={"你的密碼"}
-            icon={"password"}
-            value={formData.password}
-            handleFormData={handleFormData}
-          />
+        <LoginDiv>
+          <IconForm goal={"login"} content={formContent.login} />
           <LinkButton
             text={"忘記密碼"}
-            value={modalContent.forgetPassword.name}
+            value={"forgetPassword"}
             handleOnClick={handleOpenModal}
           />
-          <AlertText>{status.login === "failed" ? errorMessage : ""}</AlertText>
-          <Button text={"登入"} value={"login"} handleOnClick={handleGetMe} />
           <DashLine />
           <Ps>還沒有帳號嗎？</Ps>
           <Button
-            value={modalContent.register.name}
+            value={"register"}
             handleOnClick={handleOpenModal}
             text={"註冊"}
           />
-        </LoginForm>
+        </LoginDiv>
       </LoginPageContainer>
       {Object.keys(isModal).map((modal) => {
         if (!isModal[modal]) return "";
-        if (modalContent[modal].type === "form")
+        if (formContent[modal])
           return (
             <FormModal
               key={modal}
-              status={status[modal]}
-              content={modalContent[modal]}
-              errorMessage={errorMessage}
+              goal={modal}
+              content={formContent[modal]}
               handleCloseModal={handleCloseModal}
-              handleSubmit={handleSubmit}
             />
           );
         return (
           <TextModal
             key={modal}
-            content={modalContent[modal]}
+            content={textModalContent[modal]}
             handleCloseModal={handleCloseModal}
           />
         );
