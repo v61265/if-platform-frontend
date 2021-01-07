@@ -120,11 +120,13 @@ export const userReducer = createSlice({
       register: "idle",
       updateMe: "idle",
       updatePassword: "idle",
-      users: "idle",
+      getUsers: "idle",
+      getUser: "idle",
     },
     isLoading: false,
-    user: null,
+    me: null,
     users: [],
+    user: null,
     error: null,
   },
   reducers: {},
@@ -135,24 +137,24 @@ export const userReducer = createSlice({
     [getMe.fulfilled]: (state, action) => {
       state.status[action.payload.goal] = "succeeded";
       state.isLoading = false;
-      state.user = action.payload.data;
+      state.me = action.payload.data;
     },
     [getMe.rejected]: (state, action) => {
       state.status[action.payload.goal] = "failed";
       state.isLoading = false;
-      state.user = null;
+      state.me = null;
       state.error = action.payload.message;
     },
     [getUsers.pending]: (state, action) => {
       state.isLoading = true;
     },
     [getUsers.fulfilled]: (state, action) => {
-      state.status.users = "succeeded";
+      state.status.getUsers = "succeeded";
       state.isLoading = false;
       state.users = action.payload;
     },
     [getUsers.rejected]: (state, action) => {
-      state.status.users = "failed";
+      state.status.getUsers = "failed";
       state.isLoading = false;
       state.error = action.payload;
     },
@@ -160,22 +162,21 @@ export const userReducer = createSlice({
       state.isLoading = true;
     },
     [getUser.fulfilled]: (state, action) => {
-      state.status.users = "succeeded";
+      state.status.getUser = "succeeded";
       state.isLoading = false;
-      state.users = state.users.map((user) => {
-        if (user.id !== action.payload.id) return user;
-        return action.payload;
-      });
+      state.user = action.payload;
     },
     [getUser.rejected]: (state, action) => {
-      state.status.users = "failed";
+      state.status.getUser = "failed";
       state.isLoading = false;
       state.error = action.payload;
     },
   },
 });
 
-export const selectMe = (store) => store.user.user;
+export const selectMe = (store) => store.user.me;
+export const selectIsLogin = (store) => (store.user.me ? true : false);
+export const selectuser = (store) => store.user.user;
 export const selectUsers = (store) => store.user.users;
 export const selectUserStatus = (store) => store.user.status;
 export const selectUserIsLoading = (store) => store.user.isLoading;

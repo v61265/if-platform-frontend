@@ -4,15 +4,15 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import { Header } from "./components/Header";
 import LoginPage from "./page/LoginPage";
-import { selectMe } from "./redux/reducer/userSlice";
+import { selectIsLogin } from "./redux/reducer/userSlice";
 
 function App() {
-  const me = useSelector(selectMe);
+  const isLogin = useSelector(selectIsLogin);
   return (
     <Router>
-      <Header isLogin={me ? true : false} />
+      <Header isLogin={isLogin} />
       <Switch>
-        <Route path="/">{me ? <h1>home</h1> : <LoginPage />}</Route>
+        <Route path="/">{isLogin ? <h1>123</h1> : <LoginPage />}</Route>
       </Switch>
       <Footer />
     </Router>
