@@ -7,7 +7,7 @@ import LoginPage from "./page/LoginPage";
 import { selectMe } from "./redux/reducer/userSlice";
 
 function App() {
-  const isLogin = useSelector(selectMe);
+  const isLogin = useSelector(selectMe) ? true : false;
   return (
     <Router>
       <Header isLogin={isLogin} />

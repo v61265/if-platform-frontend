@@ -63,18 +63,6 @@ const StyledFormModal = styled(StyledModal)`
   }
 `;
 
-// test register
-// const registerInitState = {
-//   goal: "register",
-//   username: "test",
-//   password: "test",
-//   passwordAgain: "test",
-//   nickname: "test",
-//   email: "test",
-//   session: "gs_1",
-//   contact: "test",
-// };
-
 const registerInitState = {
   goal: "register",
   username: "",
