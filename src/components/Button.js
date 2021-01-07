@@ -8,9 +8,9 @@ import { H4, Pxs, Pxxs } from "./Text";
 const StyledLinkButton = styled(Pxxs)`
   color: ${({ theme }) => theme.color.greyDark};
 `;
-export function LinkButton({ text, value, handleOpenModal }) {
+export function LinkButton({ text, value, handleOnClick }) {
   return (
-    <StyledLinkButton as="button" value={value} onClick={handleOpenModal}>
+    <StyledLinkButton as="button" value={value} onClick={handleOnClick}>
       {text}
     </StyledLinkButton>
   );
@@ -18,10 +18,10 @@ export function LinkButton({ text, value, handleOpenModal }) {
 LinkButton.propTypes = {
   text: PropTypes.string,
   value: PropTypes.string,
-  handleOpenModal: PropTypes.func,
+  handleOnClick: PropTypes.func,
 };
 
-const StyledButton = styled(H4)`
+export const StyledButton = styled(H4)`
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
   width: 100%;
