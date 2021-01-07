@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import styled from "styled-components";
-import { Media } from "react-breakpoints";
 import { Link, useRouteMatch } from "react-router-dom";
 import { Page, PageContainer } from "../components/Page";
 import { H1, H3, H4, Hsb, Ps, Pxs } from "../components/Text";
@@ -53,7 +52,6 @@ const EventInfo = styled.div`
   }
 `;
 const Button = styled(H4)`
-  display: inline-block;
   padding: 12px;
   background: ${({ theme }) => theme.color.black};
   color: ${({ theme }) => theme.color.white};
