@@ -3,6 +3,9 @@ import { HashRouter as Router, Switch, Route } from "react-router-dom";
 import Footer from "./components/Footer";
 import { Header } from "./components/Header";
 import LoginPage from "./page/LoginPage";
+import HomePage from "./page/HomePage";
+import EventPage from "./page/EventPage";
+import HistoryEventPage from "./page/HistoryEventPage";
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
@@ -13,20 +16,18 @@ function App() {
     <Router>
       <Header isLogin={isLogin} />
       <Switch>
-        <Route path="/">
+        <Route exact path="/">
           {isLogin ? (
-            <h1
-              style={{
-                paddingTop: "100vh",
-                background: "white",
-                display: "block",
-              }}
-            >
-              home
-            </h1>
+            <HomePage />
           ) : (
             <LoginPage handleLogin={handleLogin} />
           )}
+        </Route>
+        <Route exact path="/event-page">
+          <EventPage />
+        </Route>
+        <Route exact path="/history-event-page">
+          <HistoryEventPage />
         </Route>
       </Switch>
       <Footer />
