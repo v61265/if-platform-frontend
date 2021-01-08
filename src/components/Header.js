@@ -4,6 +4,8 @@ import { NavItem } from "./Button";
 import { Avatar } from "./Avatar";
 import PropTypes from "prop-types";
 import { Fragment } from "react";
+import { useSelector } from "react-redux";
+import { selectMe } from "../redux/reducer/userSlice";
 
 const StyledHeader = styled.nav`
   background: ${({ theme }) => theme.color.black};
@@ -33,7 +35,7 @@ const Nav = styled.div`
   .menu-icon {
     display: none;
   }
-  @media (max-width: 540px) {
+  ${({ theme }) => theme.media.sm} {
     flex-flow: column wrap;
     justify-content: center;
     align-items: center;
@@ -122,7 +124,7 @@ const Brand = styled(Logo)`
 `;
 
 export function Header({ isLogin }) {
-  const username = "name";
+  const me = useSelector(selectMe);
   return (
     <StyledHeader>
       <Nav className={"nav-group"}>
@@ -134,17 +136,14 @@ export function Header({ isLogin }) {
               type={"checkbox"}
               id={"menu-btn-input"}
             />
-            <label className={"menu-icon"} for={"menu-btn-input"}>
+            <label className={"menu-icon"} htmlFor={"menu-btn-input"}>
               <span className={"hamburger-icon"}></span>
             </label>
 
             <div className={"navbar-list"}>
               <NavItem to={"/users"} content={"成員列表"} />
               <NavItem to={"/users"} content={"成員活動紀錄"} />
-              <Avatar
-                to={`/users/${username}`}
-                image={"https://i.imgur.com/sW6aO14.png"}
-              />
+              <Avatar to={`/users/${me.username}`} image={me.portrait} />
             </div>
           </Fragment>
         )}
