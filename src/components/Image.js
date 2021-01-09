@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { Link } from "react-router-dom";
 import { ReactComponent as Username } from "../svg/username.svg";
 import { ReactComponent as Password } from "../svg/password.svg";
 import { ReactComponent as Nickname } from "../svg/nickname.svg";
@@ -13,7 +14,7 @@ import logoWhite from "../svg/logo_white.svg";
 import logoBlack from "../svg/logo_black.svg";
 import PropTypes from "prop-types";
 
-const StyledLogo = styled.a`
+const StyledLogo = styled(Link)`
   display: block;
   text-indent: 101%;
   overflow: hidden;
@@ -21,14 +22,14 @@ const StyledLogo = styled.a`
   height: 40px;
   font-size: 12px;
   background: url(${logo}) center/contain no-repeat;
-  ${({ white }) =>
-    white && `background: url(${logoWhite}) left/contain no-repeat;`}
-  ${({ black }) =>
-    black && `background: url(${logoBlack}) left/contain no-repeat;`}
+  ${({ $white }) =>
+    $white && `background: url(${logoWhite}) left/contain no-repeat;`}
+  ${({ $black }) =>
+    $black && `background: url(${logoBlack}) left/contain no-repeat;`}
 `;
 export function Logo({ white, black }) {
   return (
-    <StyledLogo href="/" white={white} black={black}>
+    <StyledLogo to={"/"} $white={white} $black={black}>
       <h1>想像朋友寫作會</h1>
     </StyledLogo>
   );

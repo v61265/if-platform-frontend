@@ -145,7 +145,7 @@ const EventInProcess = () => {
 const EventInPast = () => {
   return (
     <StyledEventInPast>
-      <H3>一件很小，很美的事情 </H3>
+      <H3>一件很小，很美的事情</H3>
       <EventPicture src={pastEventImage} />
       <EventInPastInfo>
         <Pxs>2021/01/21</Pxs>
