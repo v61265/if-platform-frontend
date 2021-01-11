@@ -5,6 +5,7 @@ import { Avatar } from "./Avatar";
 import PropTypes from "prop-types";
 import { useSelector } from "react-redux";
 import { selectMe } from "../redux/reducer/userSlice";
+import { FlexBetween } from "./Flex";
 
 const StyledHeader = styled.nav`
   background: ${({ theme }) => theme.color.black};
@@ -19,13 +20,10 @@ const Nav = styled.div`
   width: 100%;
   margin: 0 auto;
   padding: ${({ theme }) => theme.font.xs}px;
-  display: flex;
+  ${FlexBetween}
   flex-wrap: wrap;
-  justify-content: space-between;
-  align-items: center;
   & .navbar-list {
-    display: flex;
-    align-items: center;
+    ${FlexBetween}
     & > * ~ * {
       margin-left: ${({ theme }) => theme.space.xs}px;
     }
@@ -38,9 +36,8 @@ const Nav = styled.div`
     display: none;
   }
   ${({ theme }) => theme.media.sm} {
-    flex-flow: column wrap;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
     & .menu-icon {
       display: block;
       position: fixed;
@@ -79,7 +76,7 @@ const Nav = styled.div`
     }
 
     & .navbar-list {
-      flex-flow: column nowrap;
+      flex-direction: column;
       max-height: 0;
       overflow: hidden;
       text-align: center;

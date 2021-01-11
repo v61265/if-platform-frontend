@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import { BackgroundPage, PageContainer } from "../components/Page";
-import { useHistory, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, selectMe, selectUser } from "../redux/reducer/userSlice";
 import { useEffect } from "react";
@@ -20,6 +20,10 @@ const Wrapper = styled.div`
       margin-left: 0;
       margin-top: ${({ theme }) => theme.font.xs}px;
     }
+  }
+  ${({ theme }) => theme.media.sm} {
+    flex-direction: column;
+    align-items: center;
   }
 `;
 
@@ -61,6 +65,9 @@ const MdPageContainer = styled(PageContainer)`
   & > * ~ * {
     margin-top: ${({ theme }) => theme.space.md}px;
   }
+  ${({ theme }) => theme.media.sm} {
+    width: 300px;
+  }
 `;
 
 const testWork = [
@@ -68,7 +75,7 @@ const testWork = [
     id: 1,
     title: "媽媽的圍巾",
     tags: ["新詩", "懷舊", "女性"],
-    event: "一件很小，很美的事情",
+    event: "一件很小，很美的事情一件很小，很美的事情一件很小，很美的事情",
   },
   {
     id: 2,
@@ -86,7 +93,6 @@ const testWork = [
 
 export default function UserPage() {
   const { id } = useParams();
-  const history = useHistory();
   const dispatch = useDispatch();
   const me = useSelector(selectMe);
   const user = useSelector(selectUser);

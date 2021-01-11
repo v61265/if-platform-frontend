@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import backgroundImage from "../svg/page_bg_pink.svg";
+import { FlexCenter } from "./Flex";
 
 export const Page = styled.div`
   background: ${({ theme }) => theme.color.background};
-  display: flex;
+  ${FlexCenter}
   overflow: scroll;
-  justify-content: center;
   padding: ${({ theme }) => `${theme.space.lg}px ${theme.space.sm}px`};
   margin-top: 72px;
 `;
@@ -13,9 +13,7 @@ export const Page = styled.div`
 export const MaskPage = styled.div`
   background: ${({ theme }) => theme.color.mask};
   overflow: scroll;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${FlexCenter}
   padding: ${({ theme }) => theme.space.lg}px 0;
   position: fixed;
   top: 0;

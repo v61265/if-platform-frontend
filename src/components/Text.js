@@ -85,3 +85,9 @@ export const HighLight = styled.span`
   display: inline-block;
   box-shadow: inset 0px -24px 0px 0px ${({ theme }) => theme.color.primary};
 `;
+
+export const TextOverflow = css`
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+`;

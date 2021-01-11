@@ -8,11 +8,11 @@ import { formContent, textModalContent } from "../constants/variable";
 import { useState } from "react";
 import { IconForm } from "../components/Form";
 import { DashLine } from "../components/Line";
+import { FlexCenter } from "../components/Flex";
 
 const LoginPageContainer = styled(PageContainer)`
   max-width: 620px;
-  display: flex;
-  align-items: center;
+  ${FlexCenter}
   position: relative;
   text-align: center;
   ${({ theme }) => theme.media.sm} {

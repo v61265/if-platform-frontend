@@ -3,7 +3,14 @@ import { StyledIcon } from "../components/Image";
 import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
-import { StyledH4, StyledH5, StyledPxs, StyledPxxs } from "./Text";
+import {
+  StyledH4,
+  StyledH5,
+  StyledPxs,
+  StyledPxxs,
+  TextOverflow,
+} from "./Text";
+import { FlexCenter } from "./Flex";
 
 const HoverColor = css`
   &:hover,
@@ -65,9 +72,7 @@ CloseButton.propTypes = {
 };
 
 export const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${FlexCenter}
   & > * ~ * {
     margin-left: ${({ theme, small }) =>
       small ? theme.font.xs : theme.font.sm}px;
@@ -108,9 +113,10 @@ export const TextLink = styled(Link)`
     primary &&
     css`
       display: inline-block;
-      padding: ${({ theme }) => `${theme.space.xxs}px ${theme.font.sm}px`};
-      color: ${({ theme }) => theme.color.black};
-      ${StyledPxxs}background: ${theme.color.primaryLight};
+      padding: ${theme.space.xxs}px ${theme.font.sm}px;
+      color: ${theme.color.black};
+      ${StyledPxxs}
+      background: ${theme.color.primaryLight};
     `}
   border-radius: 50px;
 `;

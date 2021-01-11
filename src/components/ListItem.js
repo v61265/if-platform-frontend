@@ -1,8 +1,9 @@
 import styled from "styled-components";
 import { DashLine } from "./Line";
-import { H3, LightText, Pxs } from "./Text";
+import { H3, LightText, Pxs, TextOverflow } from "./Text";
 import { ButtonGroup, Button, TextLink } from "./Button";
 import PropTypes from "prop-types";
+import { FlexBetween } from "../components/Flex";
 
 const StyledWorkListItem = styled.div`
   & > * ~ * {
@@ -10,22 +11,33 @@ const StyledWorkListItem = styled.div`
   }
 `;
 
-const Flex = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+const WorkListFlex = styled.div`
+  ${FlexBetween}
   & > div:first-of-type > * ~ * {
     margin-top: ${({ theme }) => theme.font.xs}px;
   }
   .space > * ~ * {
     margin-left: ${({ theme }) => theme.font.xs}px;
   }
+  @media (max-width: 860px) {
+    flex-direction: column;
+    align-items: flex-start;
+    & > div ~ div {
+      margin-top: ${({ theme }) => theme.space.md}px;
+    }
+  }
+`;
+
+const EventLink = styled(TextLink)`
+  max-width: 190px;
+  ${TextOverflow}
+  vertical-align: -35%;
 `;
 
 export const WorkListItem = ({ content, edit }) => (
   <>
     <StyledWorkListItem>
-      <Flex>
+      <WorkListFlex>
         <div>
           <H3>
             <TextLink to={`/work/${content.id}`}>{content.title}</TextLink>
@@ -39,12 +51,12 @@ export const WorkListItem = ({ content, edit }) => (
           </Pxs>
           <Pxs className="space">
             <LightText>來自</LightText>
-            <TextLink to={`/event/${content.event}`} button primary>
+            <EventLink to={`/event/${content.event}`} button primary>
               {content.event}
-            </TextLink>
+            </EventLink>
           </Pxs>
         </div>
-        <ButtonGroup>
+        <ButtonGroup vertical>
           <Button small secondary>
             {edit && "編輯稿件"}
           </Button>
@@ -52,7 +64,7 @@ export const WorkListItem = ({ content, edit }) => (
             {edit && "設定權限"}
           </Button>
         </ButtonGroup>
-      </Flex>
+      </WorkListFlex>
       <DashLine />
     </StyledWorkListItem>
   </>
