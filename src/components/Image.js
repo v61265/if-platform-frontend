@@ -19,7 +19,7 @@ const StyledLogo = styled(Link)`
   text-indent: 101%;
   overflow: hidden;
   white-space: nowrap;
-  height: 40px;
+  height: ${({ theme }) => theme.space.lg}px;
   font-size: 12px;
   background: url(${logo}) center/contain no-repeat;
   ${({ $white }) =>

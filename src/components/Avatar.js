@@ -1,22 +1,12 @@
-import { React } from "react";
 import styled from "styled-components";
-import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 
-const StyledAvatar = styled.img`
-  max-width: 40px;
-  min-width: 40px;
-  max-height: 40px;
-  min-height: 40px;
-  cursor: pointer;
-  border-radius: 50px;
+export const Avatar = styled(Link)`
+  display: inline-block;
+  width: ${({ theme }) => theme.space.lg}px;
+  height: ${({ theme }) => theme.space.lg}px;
+  border-radius: 50%;
   background-image: url(${({ image }) => image});
   background-size: contain;
   border: 1px solid ${({ theme }) => theme.color.primary};
 `;
-
-export function Avatar({ image }) {
-  return <StyledAvatar image={image} />;
-}
-Avatar.propTypes = {
-  image: PropTypes.string,
-};

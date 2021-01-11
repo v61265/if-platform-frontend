@@ -1,18 +1,10 @@
 import styled from "styled-components";
-import { Page, PageContainer } from "./Page";
+import { MaskPage, PageContainer } from "./Page";
 import { CloseButton } from "./Button";
 import { Ps } from "./Text";
 import PropTypes from "prop-types";
 import { IconForm } from "./Form";
 
-const Mask = styled(Page)`
-  background: ${({ theme }) => theme.color.mask};
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100vh;
-  z-index: 6;
-`;
 const StyledModal = styled(PageContainer)`
   width: 600px;
   position: relative;
@@ -28,14 +20,14 @@ const StyledTextModal = styled(StyledModal)`
 `;
 export function TextModal({ content, handleCloseModal }) {
   return (
-    <Mask>
+    <MaskPage>
       <StyledTextModal>
         <CloseButton handleCloseModal={handleCloseModal} />
         {content.map((text) => (
           <Ps>{text}</Ps>
         ))}
       </StyledTextModal>
-    </Mask>
+    </MaskPage>
   );
 }
 TextModal.propTypes = {
@@ -48,12 +40,12 @@ const StyledFormModal = styled(StyledModal)`
 `;
 export function FormModal({ goal, content, handleCloseModal }) {
   return (
-    <Mask>
+    <MaskPage>
       <StyledFormModal>
         <CloseButton handleCloseModal={handleCloseModal} />
         <IconForm goal={goal} content={content} />
       </StyledFormModal>
-    </Mask>
+    </MaskPage>
   );
 }
 FormModal.propTypes = {

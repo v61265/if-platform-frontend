@@ -43,6 +43,8 @@ const theme = {
     md: 30,
     lg: 40,
     xl: 60,
+    xxl: 80,
+    xxxxl: 120,
   },
   icon: {
     sm: 24,
