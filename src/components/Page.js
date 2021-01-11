@@ -22,3 +22,19 @@ export const PageContainer = styled.div`
     width: 100%;
   }
 `;
+
+export const EventContainer = styled.div`
+  width: 100%;
+  padding: ${({ padding }) => padding}px 0;
+  background: ${({ theme }) => theme.color.white};
+  box-shadow: ${({ theme }) => theme.shadow};
+  & > * {
+    margin-bottom: ${({ marginBottom }) => marginBottom}px;
+  }
+  & > h2, h3, div {
+    padding: 0 ${({ padding }) => padding}px;
+  }
+  ${({ theme }) => theme.media.sm} {
+    width: 325px;
+  }
+`;
