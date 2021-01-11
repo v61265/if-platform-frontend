@@ -139,7 +139,7 @@ export default function UserPage() {
         </SidebarWrapper>
         <MdPageContainer>
           <H1>
-            <HighLight>123</HighLight>123
+            <HighLight>作品</HighLight>
           </H1>
           {testWork.map((test) => (
             <WorkListItem key={test.title} content={test} edit />

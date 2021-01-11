@@ -3,13 +3,7 @@ import { StyledIcon } from "../components/Image";
 import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
-import {
-  StyledH4,
-  StyledH5,
-  StyledPxs,
-  StyledPxxs,
-  TextOverflow,
-} from "./Text";
+import { StyledH4, StyledH5, StyledPxs, StyledPxxs } from "./Text";
 import { FlexCenter } from "./Flex";
 
 const HoverColor = css`
