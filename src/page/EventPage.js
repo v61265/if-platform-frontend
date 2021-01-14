@@ -1,71 +1,48 @@
 import React from "react";
 import styled from "styled-components";
-import { Page, PageContainer } from "../components/Page";
+import { Page, PageContainer, EventContainer } from "../components/Page";
 import { H1, H4, H5, Hsb, Ps } from "../components/Text";
 import { Avatar } from "../components/Avatar";
+import { PageTitle } from "../components/Title";
 import eventImage from "../png/event_image.png";
-import backgroundImage from "../png/background_image.png";
 
-const MaxPage = styled(Page)`
-  flex-direction: column;
-  justify-content: center;
-  & > * {
-    margin-bottom: 24px;
-  }
-`;
+const MaxPage = styled(Page)``;
 
-const Background = styled.img`
-  position: absolute;
-  top: 320px;
+const AllWrapper = styled.div`
+  padding: 0 20px;
+  z-index: 1;
 `;
 
 const Wrapper = styled.div`
   display: flex;
   justify-content: center;
-  & > div {
-    display: flex;
-    flex-direction: column;
-    margin-right: 10px;
-  }
   ${({ theme }) => theme.media.sm} {
     flex-direction: column;
     align-items: center;
   }
 `;
 
-const Highlight = styled(H1)`
-  display: inline-block;
-  box-shadow: inset 0px -24px 0px 0px ${({ theme }) => theme.color.primary};
-`;
-const EventTitle = styled(H1)`
-  display: inline-block;
-`;
-
-const PageTitle = styled.div`
-  ${({ theme }) => theme.media.sm} {
-    width: 325px;
-    & ${EventTitle} {
-      display: block;
-    }
-  }
-`;
-
-const StyledEventInProcess = styled(PageContainer)`
-  width: 936px;
-  margin: 24px auto;
-  z-index: 1;
-  & > * {
+const Main = styled.div`
+  max-width: 936px;
+  display: flex;
+  flex-direction: column;
+  margin-right: 10px;
+  & > div {
     margin-bottom: 24px;
   }
   ${({ theme }) => theme.media.sm} {
     width: 325px;
+    margin-right: 0px;
   }
 `;
-const EventPictureWraper = styled.div``;
+
+const StyledEventInProcess = styled(EventContainer)``;
+
 const EventPicture = styled.img`
   width: 100%;
   height: auto;
 `;
+
 const EventInfo = styled.div`
   padding: 0 40px 40px 40px;
   text-align: left;
@@ -77,57 +54,63 @@ const EventInfo = styled.div`
   }
 `;
 
-const Block = styled(PageContainer)`
-  width: 936px;
+const Block = styled(EventContainer)`
   padding: 50px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin: 0 auto ${({ theme }) => theme.space.md}px auto;
-  z-index: 1;
   ${({ theme }) => theme.media.sm} {
-    width: 325px;
     padding: 50px 25px;
     flex-direction: column;
     justify-content: center;
-    & div {
+    & > div:first-child {
       margin-bottom: 20px;
     }
   }
 `;
+
+const NumsInfo = styled.div``;
+
 const Buttons = styled.div`
   display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  ${({ theme }) => theme.media.sm} {
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
 `;
 
 const PinkButton = styled(H4)`
   color: ${({ theme }) => theme.color.black};
   background: ${({ theme }) => theme.color.primary};
   padding: 22px 12px;
-  margin-right: 20px;
+  margin: 10px;
   display: inline-block;
   border-radius: 10px;
   cursor: pointer;
 `;
+
 const Sidebar = styled.div`
-  margin-top: 72px;
-  z-index: 1;
+  max-width: 300px;
+  min-width: 200px;
   ${({ theme }) => theme.media.sm} {
-    margin-top: 0px;
+    max-width: 325px;
+    min-width: 325px;
   }
 `;
+
 const StyledAttendeeBlock = styled.div`
-  width: 300px;
+  width: 100%;
   padding: 25px 16px;
   background-color: ${({ theme }) => theme.color.white};
-  margin-bottom: ${({ theme }) => theme.space.md}px;
+  margin-bottom: 16px;
   text-align: center;
   & ${H5} {
     margin-bottom: 15px;
   }
-  ${({ theme }) => theme.media.sm} {
-    width: 325px;
-  }
 `;
+
 const NicknameTag = styled.div`
   background-color: ${({ theme }) => theme.color.white};
   padding: 5px;
@@ -135,10 +118,11 @@ const NicknameTag = styled.div`
   line-height: 30px;
   box-shadow: 4px 4px 4px rgba(0, 0, 0, 0.15);
   position: absolute;
-  transform: translate(-40%);
+  transform: translate(-50%);
   display: none;
   z-index: 1;
 `;
+
 const AttedeePortraits = styled.div`
   display: flex;
   flex-wrap: wrap;
@@ -150,16 +134,15 @@ const AttedeePortraits = styled.div`
     }
   }
 `;
+
 const Portrait = styled(Avatar)`
   position: relative;
 `;
 
 const EventInProcess = () => {
   return (
-    <StyledEventInProcess>
-      <EventPictureWraper>
-        <EventPicture src={eventImage} />
-      </EventPictureWraper>
+    <StyledEventInProcess marginBottom={24}>
+      <EventPicture src={eventImage} />
       <EventInfo>
         <Hsb>活動時間 | 2021/01/21</Hsb>
         <Hsb>活動地點 | XXX 大樹屋</Hsb>
@@ -181,11 +164,11 @@ const EventInProcess = () => {
 const AttendCard = () => {
   return (
     <Block>
-      <div>
+      <NumsInfo>
         <H5>現場參加人數：16</H5>
         <H5>線上參加人數：18</H5>
         <H5>現場候補人數：0</H5>
-      </div>
+      </NumsInfo>
       <Buttons>
         <PinkButton>報名現場</PinkButton>
         <PinkButton>報名線上</PinkButton>
@@ -197,9 +180,9 @@ const AttendCard = () => {
 const WorkCard = () => {
   return (
     <Block>
-      <div>
+      <NumsInfo>
         <H5>稿件篇數：16</H5>
-      </div>
+      </NumsInfo>
       <Buttons>
         <PinkButton>稿件列表</PinkButton>
         <PinkButton>我要投稿</PinkButton>
@@ -241,23 +224,25 @@ const AttendeeBlock = ({ content }) => {
 export default function EventPage() {
   return (
     <MaxPage>
-      <Background src={backgroundImage} alt="" />
-      <Wrapper>
-        <div>
-          <PageTitle>
-            <Highlight>報名</Highlight>
-            <EventTitle>現正進行中的活動名稱</EventTitle>
-          </PageTitle>
-          <EventInProcess />
-          <AttendCard />
-          <WorkCard />
-        </div>
-        <Sidebar>
-          <AttendeeBlock content={"現場參加者"} />
-          <AttendeeBlock content={"線上參加者"} />
-          <AttendeeBlock content={"候補"} />
-        </Sidebar>
-      </Wrapper>
+      <AllWrapper>
+        <PageTitle
+          highLight={"報名"}
+          title={"現正進行中的活動名稱"}
+          color={({ theme }) => theme.color.primary}
+        />
+        <Wrapper>
+          <Main>
+            <EventInProcess />
+            <AttendCard />
+            <WorkCard />
+          </Main>
+          <Sidebar>
+            <AttendeeBlock content={"現場參加者"} />
+            <AttendeeBlock content={"線上參加者"} />
+            <AttendeeBlock content={"候補"} />
+          </Sidebar>
+        </Wrapper>
+      </AllWrapper>
     </MaxPage>
   );
 }
