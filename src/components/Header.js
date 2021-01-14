@@ -1,11 +1,11 @@
 import styled from "styled-components";
 import { Logo } from "./Image";
-import { NavItem } from "./Button";
+import { NavButton, NavItem } from "./Button";
 import { Avatar } from "./Avatar";
 import PropTypes from "prop-types";
-import { Fragment } from "react";
 import { useSelector } from "react-redux";
 import { selectMe } from "../redux/reducer/userSlice";
+import { FlexBetween } from "./Flex";
 
 const StyledHeader = styled.nav`
   background: ${({ theme }) => theme.color.black};
@@ -19,44 +19,36 @@ const StyledHeader = styled.nav`
 const Nav = styled.div`
   width: 100%;
   margin: 0 auto;
-  padding: 0 16px;
-  display: flex;
-  flex-flow: row wrap;
-  justify-content: space-between;
-  align-items: center;
-  height: 65px;
-  & div {
-    display: flex;
-  }
-  & img {
-    align-self: center;
+  padding: ${({ theme }) => theme.font.xs}px;
+  ${FlexBetween}
+  flex-wrap: wrap;
+  & .navbar-list {
+    ${FlexBetween}
+    & > * ~ * {
+      margin-left: ${({ theme }) => theme.space.xs}px;
+    }
+    & :last-child {
+      flex-shrink: 0;
+    }
   }
   & .menu-btn,
   .menu-icon {
     display: none;
   }
   ${({ theme }) => theme.media.sm} {
-    flex-flow: column wrap;
+    flex-direction: column;
     justify-content: center;
-    align-items: center;
-    height: auto;
-
-    & a {
-      margin: 8px 0;
-    }
-
     & .menu-icon {
       display: block;
       position: fixed;
-      top: 0;
-      right: 16px;
-      margin: 5px 0;
+      top: 12px;
+      right: ${({ theme }) => theme.font.xs}px;
       padding: 22px 8px;
       cursor: pointer;
     }
 
     & .menu-icon .hamburger-icon {
-      background-color: white;
+      background-color: ${({ theme }) => theme.color.white};
       display: block;
       height: 3px;
       width: 30px;
@@ -66,7 +58,7 @@ const Nav = styled.div`
 
     & .menu-icon .hamburger-icon:before,
     .menu-icon .hamburger-icon:after {
-      background-color: white;
+      background-color: ${({ theme }) => theme.color.white};
       content: "";
       display: block;
       height: 100%;
@@ -84,19 +76,22 @@ const Nav = styled.div`
     }
 
     & .navbar-list {
-      display: flex;
-      flex-flow: column nowrap;
-      justify-content: flex-start;
-      align-items: center;
+      flex-direction: column;
       max-height: 0;
       overflow: hidden;
       text-align: center;
       transition: max-height 0.2s ease-out;
+      & > *:first-of-type {
+        margin-top: ${({ theme }) => theme.font.xs}px;
+      }
+      & > * {
+        margin-left: 0;
+        margin-top: ${({ theme }) => theme.space.xs}px;
+      }
     }
 
     & .menu-btn:checked ~ .navbar-list {
       max-height: 240px;
-      padding-bottom: 20px;
     }
 
     & .menu-btn:checked ~ .menu-icon .hamburger-icon {
@@ -127,10 +122,10 @@ export function Header({ isLogin }) {
   const me = useSelector(selectMe);
   return (
     <StyledHeader>
-      <Nav className={"nav-group"}>
+      <Nav>
         <Brand white />
         {isLogin && (
-          <Fragment>
+          <>
             <input
               className={"menu-btn"}
               type={"checkbox"}
@@ -139,13 +134,13 @@ export function Header({ isLogin }) {
             <label className={"menu-icon"} htmlFor={"menu-btn-input"}>
               <span className={"hamburger-icon"}></span>
             </label>
-
             <div className={"navbar-list"}>
+              <NavItem to={"/"} content={"首頁"} />
               <NavItem to={"/users"} content={"成員列表"} />
-              <NavItem to={"/users"} content={"成員活動紀錄"} />
-              <Avatar to={`/users/${me.username}`} image={me.portrait} />
+              <NavButton>登出</NavButton>
+              <Avatar to={`/users/${me.id}`} image={me.portrait} />
             </div>
-          </Fragment>
+          </>
         )}
       </Nav>
     </StyledHeader>

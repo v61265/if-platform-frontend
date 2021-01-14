@@ -10,7 +10,7 @@ import { useState } from "react";
 import { getAuthToken, setAuthToken } from "../utils";
 import { IconInput, IconSelect } from "./Input";
 import { AlertText, H4, Pxxs } from "./Text";
-import { StyledButton } from "./Button";
+import { Button } from "./Button";
 import PropTypes from "prop-types";
 
 const StyledIconForm = styled.form`
@@ -67,7 +67,7 @@ export function IconForm({ goal, content }) {
         )
       )}
       {status[goal] === "failed" && <AlertText>{errorMessage}</AlertText>}
-      <StyledButton as="input" type="submit" value={content.submit} />
+      <Button large as="input" type="submit" value={content.submit} />
     </StyledIconForm>
   );
 }

@@ -70,6 +70,7 @@ export const getMe = createAsyncThunk(
           await updatePassword(data);
           break;
         default:
+          break;
       }
       const response = await getMeAPI();
       if (!response.ok) throw new Error(response.message);
@@ -98,11 +99,11 @@ export const getUsers = createAsyncThunk(
 
 export const getUser = createAsyncThunk(
   "user/getUser",
-  async (data, { rejectWithValue }) => {
+  async ({ id, data }, { rejectWithValue }) => {
     try {
       let response = {};
-      if (!data.data) response = await getUserAPI(data.id);
-      else response = await updateUser(data);
+      if (!data) response = await getUserAPI(id);
+      else response = await updateUser({ id, data });
       if (!response.ok) throw new Error(response.message);
       return response.data.user;
     } catch (error) {
@@ -176,7 +177,7 @@ export const userReducer = createSlice({
 
 export const selectMe = (store) => store.user.me;
 export const selectIsLogin = (store) => (store.user.me ? true : false);
-export const selectuser = (store) => store.user.user;
+export const selectUser = (store) => store.user.user;
 export const selectUsers = (store) => store.user.users;
 export const selectUserStatus = (store) => store.user.status;
 export const selectUserIsLoading = (store) => store.user.isLoading;

@@ -2,6 +2,7 @@ import styled from "styled-components";
 import bg from "../svg/footer_bg.svg";
 import { ButtonGroup } from "./Button";
 import { SocialIcon } from "./Image";
+import { FlexCenter } from "./Flex";
 
 const StyledFooter = styled.footer`
   width: 100%;
@@ -9,9 +10,7 @@ const StyledFooter = styled.footer`
     ${({ theme }) => theme.color.black};
   height: 200px;
   z-index: 4;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  ${FlexCenter}
   color: ${({ theme }) => theme.color.white};
   & > div > * ~ * {
     margin-top: ${({ theme }) => theme.space.sm}px;

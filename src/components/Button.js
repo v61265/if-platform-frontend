@@ -1,122 +1,82 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 import { StyledIcon } from "../components/Image";
 import { ReactComponent as Close } from "../svg/close.svg";
 import PropTypes from "prop-types";
 import { Link, useRouteMatch } from "react-router-dom";
-import { H4, Pxs, Pxxs } from "./Text";
+import { StyledH4, StyledH5, StyledPxs, StyledPxxs } from "./Text";
+import { FlexCenter } from "./Flex";
 
-const StyledLinkButton = styled(Pxxs)`
-  color: ${({ theme }) => theme.color.greyDark};
-`;
-export function LinkButton({ text, value, handleOnClick }) {
-  return (
-    <StyledLinkButton as="button" value={value} onClick={handleOnClick}>
-      {text}
-    </StyledLinkButton>
-  );
-}
-LinkButton.propTypes = {
-  text: PropTypes.string,
-  value: PropTypes.string,
-  handleOnClick: PropTypes.func,
-};
-
-export const StyledButton = styled(H4)`
-  background: ${({ theme }) => theme.color.black};
-  color: ${({ theme }) => theme.color.white};
-  width: 100%;
-  border-radius: 10px;
-  padding: ${({ theme }) => theme.space.sm}px;
-  box-shadow: ${({ theme }) => theme.shadow};
-  transition: all 0.3s ease-in-out;
-  ${({ theme }) => theme.media.sm} {
-    font-size: ${({ theme }) => theme.font.sm}px;
-  }
+const HoverColor = css`
   &:hover,
-  &.active,
   &:focus {
-    background: ${({ theme }) => theme.color.secondary};
+    color: ${({ theme }) => theme.color.primaryDark};
   }
 `;
 
-const StyledNavButton = styled(Pxs)`
-  background: ${({ theme }) => theme.color.black};
-  color: ${({ theme }) => theme.color.white};
-  width: 100%;
-  min-width: 80px;
+export const Button = styled.button`
+  ${StyledH5}
+  ${({ small }) =>
+    small &&
+    css`
+      ${StyledPxs}
+      width: 85px;
+    `}
+  ${({ large }) =>
+    large &&
+    css`
+      ${StyledH4}
+      width: 100%;
+    `}
+  ${({ theme, primary, secondary }) =>
+    primary
+      ? `background: ${theme.color.primary};`
+      : secondary
+      ? `background: ${theme.color.greyLight};`
+      : `
+      color: ${theme.color.white};
+      background: ${theme.color.black};
+    `}
   border-radius: 10px;
-  padding: 7px 5px;
+  padding: ${({ theme }) => `${theme.space.xs}px ${theme.space.sm}px`};
   box-shadow: ${({ theme }) => theme.shadow};
-  transition: all 0.3s ease-in-out;
-  ${({ theme }) => theme.media.sm} {
-    font-size: ${({ theme }) => theme.font.sm}px;
-  }
+  transition: all 0.2s ease-in-out;
   &:hover,
-  &.active,
   &:focus {
-    background: ${({ theme }) => theme.color.secondary};
+    background: ${({ theme }) => theme.color.backgroundIfLight};
+  }
+  &.active {
+    background: ${({ theme }) => theme.color.backgroundIfDark};
   }
 `;
-
-export function Button({ text, value, handleOnClick }) {
-  return (
-    <StyledButton as="button" value={value} onClick={handleOnClick}>
-      {text}
-    </StyledButton>
-  );
-}
-Button.propTypes = {
-  text: PropTypes.string,
-  value: PropTypes.string,
-  handleOnClick: PropTypes.func,
-};
-
-export function NavButton({ text, value, handleOnClick }) {
-  return (
-    <StyledNavButton as="button" value={value} onClick={handleOnClick}>
-      {text}
-    </StyledNavButton>
-  );
-}
-NavButton.propTypes = {
-  text: PropTypes.string,
-  value: PropTypes.string,
-  handleOnClick: PropTypes.func,
-};
 
 const StyledIconButton = styled.button`
   position: absolute;
   top: ${({ theme }) => theme.space.lg}px;
   right: ${({ theme }) => theme.space.lg}px;
 `;
-export function CloseButton({ handleCloseModal }) {
-  return (
-    <StyledIconButton onClick={handleCloseModal}>
-      <StyledIcon>
-        <Close />
-      </StyledIcon>
-    </StyledIconButton>
-  );
-}
+export const CloseButton = ({ handleCloseModal }) => (
+  <StyledIconButton onClick={handleCloseModal}>
+    <StyledIcon>
+      <Close />
+    </StyledIcon>
+  </StyledIconButton>
+);
 CloseButton.propTypes = {
   handleCloseModal: PropTypes.func,
 };
 
 export const ButtonGroup = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  ${FlexCenter}
   & > * ~ * {
-    margin-left: ${({ theme }) => theme.space.sm}px;
+    margin-left: ${({ theme, small }) =>
+      small ? theme.font.xs : theme.font.sm}px;
   }
 `;
 
-const StyledNavItem = styled(Link)`
+export const NavButton = styled(Button)`
+  ${StyledPxs}
   display: inline-block;
-  margin: ${({ theme }) => theme.space.sm}px;
-  & button {
-    box-shadow: none;
-  }
+  box-shadow: none;
 `;
 export function NavItem({ to, content }) {
   const match = useRouteMatch({
@@ -124,12 +84,33 @@ export function NavItem({ to, content }) {
     exact: true,
   });
   return (
-    <StyledNavItem to={to}>
-      <NavButton className={match ? "active" : ""} text={content} />
-    </StyledNavItem>
+    <NavButton to={to} className={match ? "active" : ""}>
+      {content}
+    </NavButton>
   );
 }
 NavItem.propTypes = {
   to: PropTypes.string,
   content: PropTypes.string,
 };
+
+export const TextLink = styled(Link)`
+  transition: all 0.2s ease-in-out;
+  ${HoverColor}
+  ${({ secondary }) =>
+    secondary &&
+    css`
+      color: ${({ theme }) => theme.color.greyDark};
+    `}
+  ${({ theme, button, primary }) =>
+    button &&
+    primary &&
+    css`
+      display: inline-block;
+      padding: ${theme.space.xxs}px ${theme.font.sm}px;
+      color: ${theme.color.black};
+      ${StyledPxxs}
+      background: ${theme.color.primaryLight};
+    `}
+  border-radius: 50px;
+`;

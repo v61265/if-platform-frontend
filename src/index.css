@@ -64,7 +64,7 @@ select {
   background: transparent;
 }
 
-button {
+button, input[type=submit] {
   cursor: pointer;
 }
 

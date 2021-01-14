@@ -1,16 +1,29 @@
-import React from "react";
-import { useSelector } from "react-redux";
-import { HashRouter as Router, Switch, Route } from "react-router-dom";
+import React, { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  HashRouter as Router,
+  Switch,
+  Route,
+  Redirect,
+} from "react-router-dom";
 import Footer from "./components/Footer";
 import { Header } from "./components/Header";
 import LoginPage from "./page/LoginPage";
 import HomePage from "./page/HomePage";
 import EventPage from "./page/EventPage";
 import HistoryEventPage from "./page/HistoryEventPage";
-import { selectIsLogin } from "./redux/reducer/userSlice";
+import UserPage from "./page/UserPage";
+import { getMe, selectIsLogin } from "./redux/reducer/userSlice";
+import { getAuthToken } from "./utils";
 
 function App() {
+  const dispatch = useDispatch();
   const isLogin = useSelector(selectIsLogin);
+  // const isLogin = false;
+  useEffect(() => {
+    getAuthToken();
+    dispatch(getMe({ goal: "getMe" }));
+  }, [dispatch]);
   return (
     <Router>
       <Header isLogin={isLogin} />
@@ -23,6 +36,9 @@ function App() {
         </Route>
         <Route exact path="/history-event-page">
           <HistoryEventPage />
+        </Route>
+        <Route exact path="/users/:id">
+          {isLogin ? <UserPage /> : <Redirect to="/" />}
         </Route>
       </Switch>
       <Footer />

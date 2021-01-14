@@ -1,17 +1,18 @@
 import styled from "styled-components";
-import { LinkButton, Button } from "../components/Button";
+import { Button, TextLink } from "../components/Button";
 import logoImage from "../png/logo_image.png";
-import { Ps } from "../components/Text";
+import { Ps, Pxxs } from "../components/Text";
 import { TextModal, FormModal } from "../components/Modal";
 import { Page, PageContainer } from "../components/Page";
 import { formContent, textModalContent } from "../constants/variable";
 import { useState } from "react";
 import { IconForm } from "../components/Form";
+import { DashLine } from "../components/Line";
+import { FlexCenter } from "../components/Flex";
 
 const LoginPageContainer = styled(PageContainer)`
-  max-width: 619px;
-  display: flex;
-  align-items: center;
+  max-width: 620px;
+  ${FlexCenter}
   position: relative;
   text-align: center;
   ${({ theme }) => theme.media.sm} {
@@ -20,8 +21,6 @@ const LoginPageContainer = styled(PageContainer)`
 `;
 
 const LoginImage = styled.img`
-  width: 200px;
-  height: 100%;
   ${({ theme }) => theme.media.sm} {
     display: none;
   }
@@ -36,10 +35,6 @@ const LoginDiv = styled.div`
   ${({ theme }) => theme.media.sm} {
     flex-grow: 0;
   }
-`;
-
-const DashLine = styled.hr`
-  border-top: 1px dotted ${({ theme }) => theme.color.secondary};
 `;
 
 const initIsModal = {
@@ -63,18 +58,22 @@ export default function LoginPage() {
         <LoginImage src={logoImage} alt="想像朋友寫作會" />
         <LoginDiv>
           <IconForm goal={"login"} content={formContent.login} />
-          <LinkButton
-            text={"忘記密碼"}
-            value={"forgetPassword"}
-            handleOnClick={handleOpenModal}
-          />
+          <Pxxs>
+            <TextLink
+              secondary
+              as="button"
+              value={"forgetPassword"}
+              onClick={handleOpenModal}
+            >
+              忘記密碼
+            </TextLink>
+          </Pxxs>
+
           <DashLine />
           <Ps>還沒有帳號嗎？</Ps>
-          <Button
-            value={"register"}
-            handleOnClick={handleOpenModal}
-            text={"註冊"}
-          />
+          <Button large value={"register"} onClick={handleOpenModal}>
+            註冊
+          </Button>
         </LoginDiv>
       </LoginPageContainer>
       {Object.keys(isModal).map((modal) => {
