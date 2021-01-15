@@ -1,68 +1,54 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
+# imaginary-friends platform
+想像朋友暗網，是以文字作品交流的活動為核心的稿件互評平台。
 
-## Available Scripts
+## 專案簡介
+這是想像朋友暗網的前端原始碼，採用 React Hooks 和 Redux Toolkit 開發。
 
-In the project directory, you can run:
+![](https://images.cakeresume.com/o5JjE/v61265-d34be3/b3a63cb2-bbdd-4559-a70f-75cffec6543f.png)
 
-### `npm start`
+- 使用者可使用功能：
+  - **會員系統**：註冊、登入、編輯自己資料、查看所有其他使用者資料。
+  - **活動系統**：報名活動、取消報名活動。
+  - **稿件系統**：（在活動頁面）投稿、取消投稿。編輯自己的稿件，設定自己的稿件開放權限對象。
+  - **評論系統**：（在稿件上）加附註，並可編輯與刪除自己的附註。
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+- 管理員可使用功能：
+  - **會員系統**：審核使用者權限。
+  - **活動系統**：創立、編輯與刪除活動。
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+## 如何執行
 
-### `npm test`
+#### `npm install`
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+#### `npm run start`
+在 [http://localhost:3000](http://localhost:3000) 上啟動此專案。
 
-### `npm run build`
+#### `npm run build`
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+#### `npm run deploy`
+在 GitHub Page 上部屬此專案。
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+## 使用技術
+- 前端框架
+    - React Hooks
+    - React Dom
+- 第三方套件
+    - Redux Toolkit
+    - React Router
 
-### `npm run eject`
+## 專案架構
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+#### 資料結構
+![Pages Structure](https://i.ibb.co/2vczq0v/Final-Project-ver2.png)
 
-Instead, it will copy all the configuration files and the transitive dependencies (Webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 功能結構（施工中）
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+## 專案 DEMO（施工中）
 
-## Learn More
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## 專案後端
+imaginary-friends platform 想像朋友暗網的後端原始碼，採用 Express 和 Sequelize 開發。
+- 專案連結：https://github.com/v61265/if-platform-backend
 
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
