@@ -31,10 +31,10 @@ function App() {
         <Route exact path="/">
           {isLogin ? <HomePage /> : <LoginPage />}
         </Route>
-        <Route exact path="/event-page">
+        <Route exact path="/event-page/:id">
           <EventPage />
         </Route>
-        <Route exact path="/history-event-page">
+        <Route exact path="/history-event-page/:id">
           <HistoryEventPage />
         </Route>
         <Route exact path="/users/:id">

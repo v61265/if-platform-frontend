@@ -1,12 +1,13 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { Link, useRouteMatch } from "react-router-dom";
-import { Page, PageContainer, EventContainer } from "../components/Page";
+import { useDispatch, useSelector } from 'react-redux';
+import { BackgroundPage, PageContainer, EventContainer } from "../components/Page";
 import { H1, H3, H4, Hsb, Ps, Pxs } from "../components/Text";
-import eventImage from "../png/event_image.png";
-import pastEventImage from "../png/event_image2.png";
+import { Button } from "../components/Button";
+import { getEvents } from '../redux/reducer/eventSlice';
 
-const MaxPage = styled(Page)`
+const MaxPage = styled(BackgroundPage)`
   flex-direction: column;
   align-items: center;
   & > div {
@@ -30,8 +31,10 @@ const StyledEventInProcess = styled(EventContainer)`
 `;
 
 const EventPicture = styled.img`
-  width: 100%;
+  width: auto;
   height: auto;
+  margin-right: auto;
+  margin-left: auto;
 `;
 
 const EventInfo = styled.div`
@@ -41,25 +44,23 @@ const EventInfo = styled.div`
   }
   & ${Ps} {
     margin-top: 20px;
+    white-space: pre-wrap;
   }
 `;
 
 const ButtonWrapper = styled.div`
-  display: block;
-  text-align: right;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 `;
 
-const Button = styled(H4)`
+const BlackButton = styled(Button)`
+  width: initial;
   padding: 12px;
-  background: ${({ theme }) => theme.color.black};
-  color: ${({ theme }) => theme.color.white};
-  border-radius: 10px;
-  cursor: pointer;
 `;
 
-const SecondaryButton = styled(Button)`
-  color: ${({ theme }) => theme.color.black};
-  background: ${({ theme }) => theme.color.greyLight};
+const GreyButton = styled(BlackButton)`
+  font-weight: bold;
 `;
 
 const EventList = styled.div`
@@ -107,41 +108,50 @@ const Block = styled.div`
   flex: 1 1 300px;
 `;
 
-const EventInProcess = () => {
+const EventInProcess = ({ event }) => {
+  let eventDate = event.time.toString().split('T')[0]
+  let eventTime = event.time.toString().split('T')[1].slice(0, 5)
+  let dateTime = eventDate + ' ' + eventTime
+  let description = event.description;
+  let descriptionText = description.split('/n').map(text => <span>{text}<br/></span>)
+
   return (
     <StyledEventInProcess marginBottom={24} padding={40}>
-      <H1>正在進行中的活動名稱</H1>
-      <EventPicture src={eventImage} />
+      <H1>{event.title}</H1>
+      <EventPicture src={event.picture} />
       <EventInfo>
-        <Hsb>活動時間 | 2021/01/21</Hsb>
-        <Hsb>活動地點 | XXX 大樹屋</Hsb>
-        <Hsb>現場剩餘名額 | 0</Hsb>
+        <Hsb>活動時間 | {dateTime}</Hsb>
+        <Hsb>活動地點 | {event.location}</Hsb>
+        <Hsb>現場名額 | {event.presentAttendeesLimit}</Hsb>
         <Ps>
-          培根曾經提到過，人們喜愛謊言，不僅因為害怕查明真相的艱難困苦，而且因為他們對謊言本身俱有一種自然卻腐朽的愛好。這影響了我的價值觀。泰戈爾告訴我們，昨夜的暴風雨用金色的和平為今晨加冕。這段話讓我的心境提高了一個層次。文學活動的出現，必將帶領人類走向更高的巔峰。（放不下的更多資訊用刪節號收起來）…
+          {descriptionText}
         </Ps>
       </EventInfo>
       <ButtonWrapper>
-        <Button as={Link} to={"/event-page"}>
+        <BlackButton large as={Link} to={`/event-page/${event.id}`}>
           詳細內容
-        </Button>
+        </BlackButton>
       </ButtonWrapper>
     </StyledEventInProcess>
   );
 };
 
-const EventInPast = () => {
+const EventInPast = ({ title, picture, time, location, id }) => {
+  let eventDate = time.toString().split('T')[0]
+  let eventTime = time.toString().split('T')[1].slice(0, 5)
+  let dateTime = eventDate + ' ' + eventTime
   return (
     <StyledEventInPast marginBottom={16} padding={24}>
-      <H3>一件很小，很美的事情</H3>
-      <EventPicture src={pastEventImage} />
+      <H3>{title}</H3>
+      <EventPicture src={picture} />
       <EventInPastInfo>
-        <Pxs>2021/01/21</Pxs>
-        <Pxs>XXX 大樹屋</Pxs>
+        <Pxs>{dateTime}</Pxs>
+        <Pxs>{location}</Pxs>
       </EventInPastInfo>
       <ButtonWrapper>
-        <SecondaryButton as={Link} to={"/history-event-page"}>
+        <GreyButton large secondary as={Link} to={`/history-event-page/${id}`}>
           活動歷史
-        </SecondaryButton>
+        </GreyButton>
       </ButtonWrapper>
     </StyledEventInPast>
   );
@@ -178,21 +188,37 @@ const MobilePagination = () => {
 };
 
 export default function HomePage() {
+  let eventsHistory = []
   const isMobile = false;
+  const dispatch = useDispatch();
+  const events = useSelector(store => store.event.events)
+
+  useEffect(() => {
+    dispatch(getEvents())
+  }, [dispatch]); 
+
+  if (!events) return null
+
+  for (let i = 0; i < events.length - 1; i++ ) {
+    if (new Date(events[i].time) < new Date()) {
+      eventsHistory.push(events[i])
+    }
+  }
+
   return (
     <MaxPage>
       <Wrapper>
-        <EventInProcess />
+        <EventInProcess event={events[events.length - 1]}/>
         <EventList>
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
-          <EventInPast />
+        {eventsHistory.map((eventHistory) => (
+          <EventInPast 
+            title={eventHistory.title} 
+            picture={eventHistory.picture} 
+            time={eventHistory.time} 
+            location={eventHistory.location} 
+            id={eventHistory.id}
+          />
+        ))}
           <Block />
           <Block />
         </EventList>
