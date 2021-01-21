@@ -1,10 +1,14 @@
-import React from "react";
+import React, { useEffect }from "react";
 import styled from "styled-components";
+import { useDispatch, useSelector } from 'react-redux';
+import { useParams, useHistory, Link } from 'react-router-dom';
 import { Page, PageContainer, EventContainer } from "../components/Page";
 import { H1, H4, H5, Hsb, Ps } from "../components/Text";
 import { Avatar } from "../components/Avatar";
+import { Button } from "../components/Button";
 import { PageTitle } from "../components/Title";
 import eventImage from "../png/event_image.png";
+import { getEvent, getEventParticipants } from '../redux/reducer/eventSlice';
 
 const MaxPage = styled(Page)``;
 
@@ -40,8 +44,10 @@ const StyledEventInProcess = styled(EventContainer)`
 `;
 
 const EventPicture = styled.img`
-  width: 100%;
+  width: auto;
   height: auto;
+  margin-right: auto;
+  margin-left: auto;
 `;
 
 const EventInfo = styled.div`
@@ -83,18 +89,22 @@ const Buttons = styled.div`
   }
 `;
 
-const PinkButton = styled(H4)`
-  color: ${({ theme }) => theme.color.black};
-  background: ${({ theme }) => theme.color.primary};
-  padding: 22px 12px;
+const PinkButton = styled(Button)`
+  width: initial;
   margin: 10px;
-  display: inline-block;
-  border-radius: 10px;
-  cursor: pointer;
+  padding: 18px 12px;
+  font-weight: bold;
+  &: focus {
+    background: ${({ theme }) => theme.color.primary};
+  }
 `;
 
-const GreyButton = styled(PinkButton)`
+const GreyButton = styled(H4)`
   background: ${({ theme }) => theme.color.greyLight};
+  margin: 10px;
+  padding: 18px 12px;
+  font-weight: bold;
+  border-radius: 10px;
 `
 
 const Sidebar = styled.div`
@@ -145,102 +155,115 @@ const Portrait = styled(Avatar)`
   position: relative;
 `;
 
-const EventInProcess = () => {
+const EventInProcess = ({ event }) => {
+  let eventDate = event.time.toString().split('T')[0]
+  let eventTime = event.time.toString().split('T')[1].slice(0, 5)
+  let dateTime = eventDate + ' ' + eventTime
+  let description = event.description;
+  let descriptionText = description.split('/n').map(text => <span>{text}<br/></span>)
+  
   return (
     <StyledEventInProcess marginBottom={24}>
-      <EventPicture src={eventImage} />
+      <EventPicture src={event.picture} />
       <EventInfo>
-        <Hsb>活動時間 | 2021/01/21</Hsb>
-        <Hsb>活動地點 | XXX 大樹屋</Hsb>
-        <Hsb>稿件篇數 | 20</Hsb>
-        <Hsb>現場名額 | 20</Hsb>
-        <Hsb>會議連結 | 點我</Hsb>
-        <Hsb>音檔連結 | 點我</Hsb>
+        <Hsb>活動時間 | {dateTime}</Hsb>
+        <Hsb>活動地點 | {event.location}</Hsb>
+        <Hsb>稿件篇數 | {event.workLimit}</Hsb>
+        <Hsb>現場名額 | {event.presentAttendeesLimit}</Hsb>
+        <Hsb>會議連結 | <a href={event.meetingLink} target="_blank">點我</a></Hsb>
+        <Hsb>音檔連結 | <a href={event.referance} target="_blank">點我</a></Hsb>
         <Ps>
-          面對如此難題，我們必須設想周全。奧斯特洛夫斯基說過一句發人省思的話，光明給我們經驗，讀書給我們知識。他會這麼說是有理由的。文學靈魂似乎是一種巧合，但如果我們從一個更大的角度看待問題，這似乎是一種不可避免的事實。
-          <br />
-          <br />
-          世界需要改革，需要對文學靈魂有新的認知。對我個人而言，文學靈魂不僅僅是一個重大的事件，還可能會改變我的人生。我們都知道，只要有意義，那麼就必須慎重考慮。當你搞懂後就會明白了。既然如此，我們要從本質思考，從根本解決問題。西塞羅說過一句經典的名言，只有在履行自己的義務中尋求快樂的人，才是自由地生活的人。這段話讓我的心境提高了一個層次。而這些並不是完全重要，更加重要的問題是，探討文學靈魂時，如果發現非常複雜，那麼想必不簡單。培根曾經說過，美德有如名香，經燃燒或壓抑而其香愈烈：蓋幸運最難顯露惡德而厄運最能顯露美德也。帶著這句話，我們還要更加慎重的審視這個問題。說到文學靈魂，你會想到什麼呢？文學靈魂，發生了會如何，不發生又會如何。文學靈魂對我來說有著舉足輕重的地位，必須要嚴肅認真的看待。在人類的歷史中，我們總是盡了一切努力想搞懂文學靈魂。科齊布斯基說過一句發人省思的話，有兩種容易悄悄過生活的方法，就是相信一切或懷疑一切。兩種方法都使我們省卻思考。這是撼動人心的。
+          {descriptionText}
         </Ps>
       </EventInfo>
     </StyledEventInProcess>
   );
 };
 
-const AttendCard = () => {
+const AttendCard = ({ participants }) => {
   return (
     <Block>
       <NumsInfo>
-        <H5>現場參加人數：16</H5>
-        <H5>線上參加人數：18</H5>
-        <H5>現場候補人數：0</H5>
+        <H5>現場參加人數：{participants.present.length}</H5>
+        <H5>線上參加人數：{participants.online.length}</H5>
+        <H5>現場候補人數：{participants.alternative.length}</H5>
       </NumsInfo>
       <Buttons>
-        <GreyButton>已結束</GreyButton>
-        <GreyButton>已結束</GreyButton>
+        <GreyButton large secondary>已結束</GreyButton>
+        <GreyButton large secondary>已結束</GreyButton>
       </Buttons>
     </Block>
   );
 };
 
-const WorkCard = () => {
+const WorkCard = ({ event }) => {
   return (
     <Block>
       <NumsInfo>
-        <H5>稿件篇數：16</H5>
+        <H5>稿件篇數：{event.Works.length}</H5>
       </NumsInfo>
       <Buttons>
-        <PinkButton>稿件列表</PinkButton>
+        <PinkButton large primary as={Link} to={`/event-work-list/`}>稿件列表</PinkButton>
       </Buttons>
     </Block>
   );
 };
 
-const PortraitBlock = () => {
+const PortraitBlock = ({ image, nickname, username}) => {
   return (
     <div>
-      <Portrait image={"https://i.imgur.com/sW6aO14.png"} />
-      <NicknameTag>Lidemy(@lidemymtr04)</NicknameTag>
+      <Portrait image={image} />
+      <NicknameTag>{nickname}(@{username})</NicknameTag>
     </div>
   );
 };
 
-const AttendeeBlock = ({ content }) => {
+const AttendeeBlock = ({ content, event, participantId }) => {
+  let participants = []
+  for (let i = 0; i < event.participant.length; i++ ) {
+    if (participantId.indexOf(Number(event.participant[i].id)) > -1) {
+      participants.push(event.participant[i])
+    }
+  }
   return (
     <StyledAttendeeBlock>
       <H5>{content}</H5>
       <AttedeePortraits>
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
-        <PortraitBlock />
+      {participants.map((participant) => (
+        <PortraitBlock image={participant.portrait} nickname={participant.nickname} username={participant.username}/>
+      ))}
       </AttedeePortraits>
     </StyledAttendeeBlock>
   );
 };
 
 export default function EventPage() {
+  const { id } = useParams();
+  const dispatch = useDispatch();
+  const event = useSelector(store => store.event.event)
+  const eventParticipants = useSelector(store => store.event.eventParticipants)
+ 
+  useEffect(() => {
+    dispatch(getEvent(id))
+    dispatch(getEventParticipants(id))
+  }, [id, dispatch]); 
+
+  if (!event || !eventParticipants) return null
+
   return (
     <MaxPage>
       <AllWrapper>
-        <PageTitle highLight={"已結束"} title={"一件很小，很美的事情"} color={({ theme }) => theme.color.grey}/>
+        <PageTitle highLight={"已結束"} title={event.title} color={({ theme }) => theme.color.grey}/>
         <Wrapper>
           <Main>
-            <EventInProcess />
-            <AttendCard />
-            <WorkCard />
+            <EventInProcess event={event}/>
+            <AttendCard participants={eventParticipants}/>
+            <WorkCard event={event}/>
           </Main>
           <Sidebar>
-            <AttendeeBlock content={"現場參加者"} />
-            <AttendeeBlock content={"線上參加者"} />
-            <AttendeeBlock content={"候補"} />
+            <AttendeeBlock content={"現場參加者"} event={event} participantId={eventParticipants.present}/>
+            <AttendeeBlock content={"線上參加者"} event={event} participantId={eventParticipants.online}/>
+            <AttendeeBlock content={"候補"} event={event} participantId={eventParticipants.alternative}/>
           </Sidebar>
         </Wrapper>
       </AllWrapper>
