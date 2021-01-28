@@ -1,14 +1,14 @@
-import React, { useEffect }from "react";
+import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, useHistory, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, useHistory, Link } from "react-router-dom";
 import { Page, PageContainer, EventContainer } from "../components/Page";
 import { H1, H4, H5, Hsb, Ps } from "../components/Text";
 import { Avatar } from "../components/Avatar";
 import { Button } from "../components/Button";
 import { PageTitle } from "../components/Title";
 import eventImage from "../png/event_image.png";
-import { getEvent, getEventParticipants } from '../redux/reducer/eventSlice';
+import { getEvent, getEventParticipants } from "../redux/reducer/eventSlice";
 
 const MaxPage = styled(Page)``;
 
@@ -40,8 +40,7 @@ const Main = styled.div`
   }
 `;
 
-const StyledEventInProcess = styled(EventContainer)`
-`;
+const StyledEventInProcess = styled(EventContainer)``;
 
 const EventPicture = styled.img`
   width: auto;
@@ -76,8 +75,7 @@ const Block = styled(EventContainer)`
   }
 `;
 
-const NumsInfo = styled.div`
-`;
+const NumsInfo = styled.div``;
 
 const Buttons = styled.div`
   display: flex;
@@ -105,7 +103,7 @@ const GreyButton = styled(H4)`
   padding: 18px 12px;
   font-weight: bold;
   border-radius: 10px;
-`
+`;
 
 const Sidebar = styled.div`
   max-width: 300px;
@@ -156,12 +154,17 @@ const Portrait = styled(Avatar)`
 `;
 
 const EventInProcess = ({ event }) => {
-  let eventDate = event.time.toString().split('T')[0]
-  let eventTime = event.time.toString().split('T')[1].slice(0, 5)
-  let dateTime = eventDate + ' ' + eventTime
+  let eventDate = event.time.toString().split("T")[0];
+  let eventTime = event.time.toString().split("T")[1].slice(0, 5);
+  let dateTime = eventDate + " " + eventTime;
   let description = event.description;
-  let descriptionText = description.split('/n').map(text => <span>{text}<br/></span>)
-  
+  let descriptionText = description.split("/n").map((text) => (
+    <span>
+      {text}
+      <br />
+    </span>
+  ));
+
   return (
     <StyledEventInProcess marginBottom={24}>
       <EventPicture src={event.picture} />
@@ -170,11 +173,23 @@ const EventInProcess = ({ event }) => {
         <Hsb>活動地點 | {event.location}</Hsb>
         <Hsb>稿件篇數 | {event.workLimit}</Hsb>
         <Hsb>現場名額 | {event.presentAttendeesLimit}</Hsb>
-        <Hsb>會議連結 | <a href={event.meetingLink} target="_blank">點我</a></Hsb>
-        <Hsb>音檔連結 | <a href={event.referance} target="_blank">點我</a></Hsb>
-        <Ps>
-          {descriptionText}
-        </Ps>
+        {event.meetingLink && (
+          <Hsb>
+            會議連結 |{" "}
+            <a href={event.meetingLink} target="_blank">
+              點我
+            </a>
+          </Hsb>
+        )}
+        {event.referance && (
+          <Hsb>
+            音檔連結 |{" "}
+            <a href={event.referance} target="_blank">
+              點我
+            </a>
+          </Hsb>
+        )}
+        <Ps>{descriptionText}</Ps>
       </EventInfo>
     </StyledEventInProcess>
   );
@@ -189,8 +204,12 @@ const AttendCard = ({ participants }) => {
         <H5>現場候補人數：{participants.alternative.length}</H5>
       </NumsInfo>
       <Buttons>
-        <GreyButton large secondary>已結束</GreyButton>
-        <GreyButton large secondary>已結束</GreyButton>
+        <GreyButton large secondary>
+          已結束
+        </GreyButton>
+        <GreyButton large secondary>
+          已結束
+        </GreyButton>
       </Buttons>
     </Block>
   );
@@ -203,35 +222,43 @@ const WorkCard = ({ event }) => {
         <H5>稿件篇數：{event.Works.length}</H5>
       </NumsInfo>
       <Buttons>
-        <PinkButton large primary as={Link} to={`/event-work-list/`}>稿件列表</PinkButton>
+        <PinkButton large primary as={Link} to={`/event-work-list/`}>
+          稿件列表
+        </PinkButton>
       </Buttons>
     </Block>
   );
 };
 
-const PortraitBlock = ({ image, nickname, username}) => {
+const PortraitBlock = ({ image, nickname, username }) => {
   return (
     <div>
       <Portrait image={image} />
-      <NicknameTag>{nickname}(@{username})</NicknameTag>
+      <NicknameTag>
+        {nickname}(@{username})
+      </NicknameTag>
     </div>
   );
 };
 
 const AttendeeBlock = ({ content, event, participantId }) => {
-  let participants = []
-  for (let i = 0; i < event.participant.length; i++ ) {
+  let participants = [];
+  for (let i = 0; i < event.participant.length; i++) {
     if (participantId.indexOf(Number(event.participant[i].id)) > -1) {
-      participants.push(event.participant[i])
+      participants.push(event.participant[i]);
     }
   }
   return (
     <StyledAttendeeBlock>
       <H5>{content}</H5>
       <AttedeePortraits>
-      {participants.map((participant) => (
-        <PortraitBlock image={participant.portrait} nickname={participant.nickname} username={participant.username}/>
-      ))}
+        {participants.map((participant) => (
+          <PortraitBlock
+            image={participant.portrait}
+            nickname={participant.nickname}
+            username={participant.username}
+          />
+        ))}
       </AttedeePortraits>
     </StyledAttendeeBlock>
   );
@@ -240,30 +267,48 @@ const AttendeeBlock = ({ content, event, participantId }) => {
 export default function EventPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const event = useSelector(store => store.event.event)
-  const eventParticipants = useSelector(store => store.event.eventParticipants)
- 
-  useEffect(() => {
-    dispatch(getEvent(id))
-    dispatch(getEventParticipants(id))
-  }, [id, dispatch]); 
+  const event = useSelector((store) => store.event.event);
+  const eventParticipants = useSelector(
+    (store) => store.event.eventParticipants
+  );
 
-  if (!event || !eventParticipants) return null
+  useEffect(() => {
+    dispatch(getEvent(id));
+    dispatch(getEventParticipants(id));
+  }, [id, dispatch]);
+
+  if (!event || !eventParticipants) return null;
 
   return (
     <MaxPage>
       <AllWrapper>
-        <PageTitle highLight={"已結束"} title={event.title} color={({ theme }) => theme.color.grey}/>
+        <PageTitle
+          highLight={"已結束"}
+          title={event.title}
+          color={({ theme }) => theme.color.grey}
+        />
         <Wrapper>
           <Main>
-            <EventInProcess event={event}/>
-            <AttendCard participants={eventParticipants}/>
-            <WorkCard event={event}/>
+            <EventInProcess event={event} />
+            <AttendCard participants={eventParticipants} />
+            <WorkCard event={event} />
           </Main>
           <Sidebar>
-            <AttendeeBlock content={"現場參加者"} event={event} participantId={eventParticipants.present}/>
-            <AttendeeBlock content={"線上參加者"} event={event} participantId={eventParticipants.online}/>
-            <AttendeeBlock content={"候補"} event={event} participantId={eventParticipants.alternative}/>
+            <AttendeeBlock
+              content={"現場參加者"}
+              event={event}
+              participantId={eventParticipants.present}
+            />
+            <AttendeeBlock
+              content={"線上參加者"}
+              event={event}
+              participantId={eventParticipants.online}
+            />
+            <AttendeeBlock
+              content={"候補"}
+              event={event}
+              participantId={eventParticipants.alternative}
+            />
           </Sidebar>
         </Wrapper>
       </AllWrapper>

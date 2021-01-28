@@ -100,3 +100,9 @@ export const textModalContent = {
     "請靜待管理員核可，並注意電子郵件信箱是否收到核可通知信！",
   ],
 };
+
+export const checkModalContent = {
+  present: ["確認要報名現場嗎？"],
+  online: ["確認要報名線上嗎？"],
+  cancelSignUpEvent: ["確認要取消參加嗎？"],
+};
