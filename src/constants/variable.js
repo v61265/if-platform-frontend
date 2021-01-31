@@ -33,7 +33,7 @@ export const formContent = {
         placeholder: "設定密碼（未來可以更改）",
         icon: "password",
       },
-      passwordAgain: {
+      againPassword: {
         type: "password",
         placeholder: "請再輸入一次密碼",
         icon: "password",
