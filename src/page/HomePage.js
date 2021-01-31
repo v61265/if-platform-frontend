@@ -181,7 +181,7 @@ export default function HomePage() {
 
   // pagination
   let offset = itemsPerPage * (currentPage - 1);
-  let totalEvents = events.length;
+  let totalEvents = eventsHistory.length;
   let totalPages = Math.ceil(totalEvents / itemsPerPage);
 
   const handleClick = (pageContent) => {
