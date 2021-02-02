@@ -64,11 +64,21 @@ select {
   background: transparent;
 }
 
-button, input[type=submit] {
+button,
+input[type="submit"] {
   cursor: pointer;
 }
 
 option {
   min-height: 0;
   padding: 0;
+}
+
+/* Text Editor */
+.quill {
+  margin-top: 24px;
+}
+
+.ql-editor {
+  min-height: 30em;
 }

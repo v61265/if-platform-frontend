@@ -1,5 +1,6 @@
 import { getAuthToken } from "./utils";
-const BASE_URL = "http://imaginary-friends.tw:3001/v1";
+// const BASE_URL = "http://imaginary-friends.tw:3001/v1";
+const BASE_URL = "http://localhost:3001/v1";
 
 export const register = async (
   username,
@@ -231,5 +232,31 @@ export const cancelSignUpEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
+  }).then((res) => res.json());
+};
+
+export const addWork = ({
+  title,
+  eventId,
+  category,
+  open,
+  anonymous,
+  content,
+}) => {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/works/add`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title,
+      eventId,
+      category,
+      open,
+      anonymous,
+      content,
+    }),
   }).then((res) => res.json());
 };

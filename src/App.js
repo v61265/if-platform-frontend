@@ -15,6 +15,7 @@ import HistoryEventPage from "./page/HistoryEventPage";
 import UserPage from "./page/UserPage";
 import { getMe, selectIsLogin } from "./redux/reducer/userSlice";
 import { getAuthToken } from "./utils";
+import SubmitWorkPage from "./page/SubmitWorkPage";
 
 function App() {
   const dispatch = useDispatch();
@@ -39,6 +40,9 @@ function App() {
         </Route>
         <Route exact path="/users/:id">
           {isLogin ? <UserPage /> : <Redirect to="/" />}
+        </Route>
+        <Route exact path="/event-page/:id/works/add">
+          {isLogin ? <SubmitWorkPage /> : <Redirect to="/" />}
         </Route>
       </Switch>
       <Footer />
