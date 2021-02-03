@@ -1,25 +1,16 @@
 import { useState, useEffect } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import { getUser, selectMe, selectUser } from "../redux/reducer/userSlice";
-import { addWork as addWorkAPI } from "../WebAPI";
+import { addWork as addWorkAPI, getWork as getWorkAPI } from "../WebAPI";
 import styled from "styled-components";
-import { Page, BackgroundPage, PageContainer } from "../components/Page";
+import { BackgroundPage, PageContainer } from "../components/Page";
 import { PageTitle } from "../components/Title";
 import { QuillWrite } from "../components/TextEditor";
 import { StyledPfc } from "../components/Text";
 import { Button, ButtonGroup } from "../components/Button";
-import {
-  getEvent,
-  getEventParticipants,
-  signUpEvent,
-  cancelSignUpEvent,
-  checkAttend,
-  checkWorkNum,
-  checkPresentNum,
-} from "../redux/reducer/eventSlice";
+import { getEvent } from "../redux/reducer/eventSlice";
 
-const MaxPage = styled(Page)``;
+const MaxPage = styled(BackgroundPage)``;
 
 const Wrapper = styled.div`
   max-width: 936px;
@@ -33,8 +24,6 @@ const Wrapper = styled.div`
 const StyledSubmitPage = styled(PageContainer)`
   padding: 40px;
 `;
-
-// 先寫的元件 style，之後再看情況併入元件組
 
 const WorkInfoWrapper = styled.div`
   display: flex;
@@ -81,19 +70,36 @@ const categorys = [
 ];
 
 export default function SubmitWorkPage() {
-  const me = useSelector(selectMe);
   const [title, setTitle] = useState("");
   const [category, setCategory] = useState("poetry");
   const [paragraph, setParagraph] = useState("");
   const [paragraphDelta, setParagraphDelta] = useState("");
   const history = useHistory();
-  const dispatch = useDispatch();
   const { id } = useParams();
+  const { workid } = useParams();
+  const dispatch = useDispatch();
   const event = useSelector((store) => store.event.event);
+
+  async function getWork(id) {
+    if (workid !== undefined) {
+      const data = await getWorkAPI(id);
+      console.log(data);
+      setTitle(data.works.title);
+      setCategory(data.works.category);
+      setParagraph(data.works.content);
+    }
+    return null;
+  }
 
   useEffect(() => {
     dispatch(getEvent(id));
   }, [id, dispatch]);
+
+  useEffect(() => {
+    getWork(workid);
+  }, []);
+
+  if (!event) return null;
 
   function handleChangeTitle(e) {
     setTitle(e.target.value);
@@ -109,6 +115,9 @@ export default function SubmitWorkPage() {
   }
 
   function handleSaveParagraph() {
+    if (!title.trim()) {
+      return alert("記得寫文章標題喔！");
+    }
     const data = {
       title: title,
       eventId: event.id,
@@ -118,6 +127,7 @@ export default function SubmitWorkPage() {
       content: paragraphDelta,
     };
     addWorkAPI(data);
+    alert("新增稿件成功！");
   }
 
   function handleBack() {
@@ -138,7 +148,11 @@ export default function SubmitWorkPage() {
               onChange={handleChangeTitle}
               placeholder={"文章名稱"}
             />
-            <StyledSelectInput onChange={handleChangeSelection}>
+            <StyledSelectInput
+              value={category}
+              defaultValue={category}
+              onChange={handleChangeSelection}
+            >
               {categorys.map(({ value, name }) => (
                 <option key={value} value={value}>
                   {name}
@@ -155,9 +169,15 @@ export default function SubmitWorkPage() {
             <Button large secondary onClick={handleBack}>
               {"返回"}
             </Button>
-            <Button large primary onClick={handleSaveParagraph}>
-              {"投稿"}
-            </Button>
+            {workid ? (
+              <Button large primary onClick={handleSaveParagraph}>
+                更新
+              </Button>
+            ) : (
+              <Button large primary onClick={handleSaveParagraph}>
+                投稿
+              </Button>
+            )}
           </StyledButtonGroup>
           {/*
             生菜的其他功能可以放這裡

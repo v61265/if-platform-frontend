@@ -1,6 +1,5 @@
 import { getAuthToken } from "./utils";
-// const BASE_URL = "http://imaginary-friends.tw:3001/v1";
-const BASE_URL = "http://localhost:3001/v1";
+const BASE_URL = "http://imaginary-friends.tw:3001/v1";
 
 export const register = async (
   username,
@@ -259,4 +258,35 @@ export const addWork = ({
       content,
     }),
   }).then((res) => res.json());
+};
+
+export const getWorks = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(
+    `${BASE_URL}/works?` +
+      new URLSearchParams({
+        authorId: id,
+        _expand_all: true,
+      }),
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return await response.json();
+};
+
+export const getWork = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(`${BASE_URL}/works/${id}`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return await response.json();
 };

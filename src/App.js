@@ -44,6 +44,9 @@ function App() {
         <Route exact path="/event-page/:id/works/add">
           {isLogin ? <SubmitWorkPage /> : <Redirect to="/" />}
         </Route>
+        <Route exact path="/event-page/:id/works/:workid">
+          {isLogin ? <SubmitWorkPage /> : <Redirect to="/" />}
+        </Route>
       </Switch>
       <Footer />
     </Router>
