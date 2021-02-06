@@ -14,7 +14,7 @@ import {
 const register = async ({
   username,
   password,
-  passwordAgain,
+  againPassword,
   nickname,
   email,
   session,
@@ -23,7 +23,7 @@ const register = async ({
   const response = await registerAPI(
     username,
     password,
-    passwordAgain,
+    againPassword,
     nickname,
     email,
     session,

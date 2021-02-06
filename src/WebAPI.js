@@ -4,7 +4,7 @@ const BASE_URL = "http://imaginary-friends.tw:3001/v1";
 export const register = async (
   username,
   password,
-  passwordAgain,
+  againPassword,
   nickname,
   email,
   session,
@@ -18,7 +18,7 @@ export const register = async (
     body: JSON.stringify({
       username,
       password,
-      passwordAgain,
+      againPassword,
       nickname,
       email,
       session,
@@ -128,7 +128,7 @@ export const getEvents = () => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const getEvent = (id) => {
@@ -137,7 +137,7 @@ export const getEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const getEventParticipants = (id) => {
@@ -146,16 +146,16 @@ export const getEventParticipants = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const addEvent = (input) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/add`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
-      authorization: `Bearer ${token}`
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(input)
   }).then(res => res.json());
@@ -164,9 +164,9 @@ export const addEvent = (input) => {
 export const editEvent = (id, input) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/${id}`, {
-    method: 'PATCH',
+    method: "PATCH",
     headers: {
-      'content-type': 'application/json',
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify(input),
@@ -179,21 +179,21 @@ export const deleteEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const signUpEvent = (id, type) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/sign-up/${id}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      type
-    })
-  }).then(res => res.json());
+      type,
+    }),
+  }).then((res) => res.json());
 };
 
 export const cancelSignUpEvent = (id) => {
@@ -202,5 +202,5 @@ export const cancelSignUpEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
