@@ -149,7 +149,7 @@ export const getEventParticipants = (id) => {
   }).then(res => res.json());
 };
 
-export const addEvent = (title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => {
+export const addEvent = (input) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/add`, {
     method: 'POST',
@@ -157,18 +157,11 @@ export const addEvent = (title, presentAttendeesLimit, workLimit, time, openWork
       'content-type': 'application/json',
       authorization: `Bearer ${token}`
     },
-    body: JSON.stringify({
-      title, 
-      presentAttendeesLimit,
-      workLimit,
-      time,
-      openWorksTime,
-      location,
-    })
+    body: JSON.stringify(input)
   }).then(res => res.json());
 };
 
-export const editEvent = (id, title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => {
+export const editEvent = (id, input) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/${id}`, {
     method: 'PATCH',
@@ -176,14 +169,7 @@ export const editEvent = (id, title, presentAttendeesLimit, workLimit, time, ope
       'content-type': 'application/json',
       authorization: `Bearer ${token}`,
     },
-    body: JSON.stringify({
-      title, 
-      presentAttendeesLimit,
-      workLimit,
-      time,
-      openWorksTime,
-      location,
-    }),
+    body: JSON.stringify(input),
   }).then(res => res.json());
 };
 

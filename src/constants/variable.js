@@ -105,4 +105,5 @@ export const checkModalContent = {
   present: ["確認要報名現場嗎？"],
   online: ["確認要報名線上嗎？"],
   cancelSignUpEvent: ["確認要取消參加嗎？"],
+  handleAddEvent: ["確認新增活動？"],
 };

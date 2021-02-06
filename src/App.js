@@ -13,6 +13,7 @@ import HomePage from "./page/HomePage";
 import EventPage from "./page/EventPage";
 import HistoryEventPage from "./page/HistoryEventPage";
 import UserPage from "./page/UserPage";
+import AddEventPage from "./page/AddEventPage";
 import { getMe, selectIsLogin } from "./redux/reducer/userSlice";
 import { getAuthToken } from "./utils";
 
@@ -39,6 +40,9 @@ function App() {
         </Route>
         <Route exact path="/users/:id">
           {isLogin ? <UserPage /> : <Redirect to="/" />}
+        </Route>
+        <Route exact path="/events/add">
+          <AddEventPage />
         </Route>
       </Switch>
       <Footer />
