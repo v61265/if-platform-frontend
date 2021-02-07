@@ -4,6 +4,7 @@ import { H3, LightText, Pxs, TextOverflow } from "./Text";
 import { ButtonGroup, Button, TextLink } from "./Button";
 import PropTypes from "prop-types";
 import { FlexBetween } from "../components/Flex";
+import { Link } from "react-router-dom";
 
 const StyledWorkListItem = styled.div`
   & > * ~ * {
@@ -34,32 +35,38 @@ const EventLink = styled(TextLink)`
   vertical-align: -35%;
 `;
 
-export const WorkListItem = ({ content, edit }) => (
+export const WorkListItem = ({ data, edit }) => (
   <>
     <StyledWorkListItem>
       <WorkListFlex>
         <div>
           <H3>
-            <TextLink to={`/work/${content.id}`}>{content.title}</TextLink>
+            <TextLink to={`/work/${data.id}`}>{data.title}</TextLink>
           </H3>
           <Pxs className="space">
-            {content.tags.map((tag) => (
-              <TextLink key={tag} to={`/${tag}`}>
-                #{tag}
+            {data.Tags.map((tag) => (
+              <TextLink key={tag.id} to={`/${tag.id}`}>
+                #{tag.content}
               </TextLink>
             ))}
           </Pxs>
           <Pxs className="space">
             <LightText>來自</LightText>
-            <EventLink to={`/event/${content.event}`} button primary>
-              {content.event}
+            <EventLink to={`/event-page/${data.eventId}`} button primary>
+              {data.Event.title}
             </EventLink>
           </Pxs>
         </div>
         <ButtonGroup vertical>
-          <Button small secondary>
+          <Button
+            small
+            secondary
+            as={Link}
+            to={`/event-page/${data.eventId}/works/${data.id}`}
+          >
             {edit && "編輯稿件"}
           </Button>
+
           <Button small secondary>
             {edit && "設定權限"}
           </Button>
@@ -70,6 +77,6 @@ export const WorkListItem = ({ content, edit }) => (
   </>
 );
 WorkListItem.propTypes = {
-  content: PropTypes.object,
+  data: PropTypes.object,
   edit: PropTypes.bool,
 };

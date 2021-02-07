@@ -1,14 +1,22 @@
 import React, { useEffect } from "react";
 import styled from "styled-components";
-import { useDispatch, useSelector } from 'react-redux';
-import { useParams, Link } from 'react-router-dom';
+import { useDispatch, useSelector } from "react-redux";
+import { useParams, Link } from "react-router-dom";
 import { BackgroundPage, EventContainer } from "../components/Page";
 import { Button } from "../components/Button";
 import { H4, H5, Hsb, Ps } from "../components/Text";
 import { Avatar } from "../components/Avatar";
 import { PageTitle } from "../components/Title";
-import { getEvent, getEventParticipants, signUpEvent, cancelSignUpEvent, checkAttend, checkWorkNum, checkPresentNum } from '../redux/reducer/eventSlice';
-import { selectMe } from '../redux/reducer/userSlice';
+import {
+  getEvent,
+  getEventParticipants,
+  signUpEvent,
+  cancelSignUpEvent,
+  checkAttend,
+  checkWorkNum,
+  checkPresentNum,
+} from "../redux/reducer/eventSlice";
+import { selectMe } from "../redux/reducer/userSlice";
 
 const MaxPage = styled(BackgroundPage)``;
 
@@ -41,7 +49,7 @@ const Main = styled.div`
 `;
 
 const StyledEventInProcess = styled(EventContainer)`
-  max-width: 936px
+  max-width: 936px;
 `;
 
 const EventPicture = styled.img`
@@ -103,11 +111,11 @@ const GreyButton = styled(PinkButton)`
   &: focus {
     background: ${({ theme }) => theme.color.greyLight};
   }
-`
+`;
 const NoneButton = styled(H4)`
   padding: 18px 12px;
   margin: 10px;
-`
+`;
 const Sidebar = styled.div`
   max-width: 300px;
   min-width: 200px;
@@ -157,11 +165,16 @@ const Portrait = styled(Avatar)`
 `;
 
 const EventInProcess = ({ event }) => {
-  let eventDate = event.time.toString().split('T')[0]
-  let eventTime = event.time.toString().split('T')[1].slice(0, 5)
-  let dateTime = eventDate + ' ' + eventTime
+  let eventDate = event.time.toString().split("T")[0];
+  let eventTime = event.time.toString().split("T")[1].slice(0, 5);
+  let dateTime = eventDate + " " + eventTime;
   let description = event.description;
-  let descriptionText = description.split('/n').map(text => <span>{text}<br/></span>)
+  let descriptionText = description.split("/n").map((text) => (
+    <span>
+      {text}
+      <br />
+    </span>
+  ));
 
   return (
     <StyledEventInProcess marginBottom={24}>
@@ -171,17 +184,31 @@ const EventInProcess = ({ event }) => {
         <Hsb>活動地點 | {event.location}</Hsb>
         <Hsb>稿件篇數 | {event.workLimit}</Hsb>
         <Hsb>現場名額 | {event.presentAttendeesLimit}</Hsb>
-        <Hsb>會議連結 | <a href={event.meetingLink} target="_blank">點我</a></Hsb>
-        <Hsb>音檔連結 | <a href={event.referance} target="_blank">點我</a></Hsb>
-        <Ps>
-          {descriptionText}
-        </Ps>
+        <Hsb>
+          會議連結 |{" "}
+          <a href={event.meetingLink} target="_blank">
+            點我
+          </a>
+        </Hsb>
+        <Hsb>
+          音檔連結 |{" "}
+          <a href={event.referance} target="_blank">
+            點我
+          </a>
+        </Hsb>
+        <Ps>{descriptionText}</Ps>
       </EventInfo>
     </StyledEventInProcess>
   );
 };
 
-const AttendCard = ({ participants, handleSignUpEvent, handleCancelSignUpEvent, isAttend, isPresentLimit }) => {
+const AttendCard = ({
+  participants,
+  handleSignUpEvent,
+  handleCancelSignUpEvent,
+  isAttend,
+  isPresentLimit,
+}) => {
   return (
     <Block>
       <NumsInfo>
@@ -189,20 +216,51 @@ const AttendCard = ({ participants, handleSignUpEvent, handleCancelSignUpEvent, 
         <H5>線上參加人數：{participants.online.length}</H5>
         <H5>現場候補人數：{participants.alternative.length}</H5>
       </NumsInfo>
-      {isAttend ? 
+      {isAttend ? (
         <Buttons>
-          <GreyButton large secondary as={Link} onClick={handleCancelSignUpEvent} >取消報名</GreyButton>
+          <GreyButton
+            large
+            secondary
+            as={Link}
+            onClick={handleCancelSignUpEvent}
+          >
+            取消報名
+          </GreyButton>
         </Buttons>
-        : 
+      ) : (
         <Buttons>
-        {isPresentLimit ?
-          <GreyButton large secondary as={Link} onClick={handleSignUpEvent} type={"present"}>候補現場</GreyButton>
-          :
-          <PinkButton large primary as={Link} onClick={handleSignUpEvent} type={"present"}>報名現場</PinkButton>
-        }
-          <PinkButton large primary as={Link} onClick={handleSignUpEvent} type={"online"}>報名線上</PinkButton>
+          {isPresentLimit ? (
+            <GreyButton
+              large
+              secondary
+              as={Link}
+              onClick={handleSignUpEvent}
+              type={"present"}
+            >
+              候補現場
+            </GreyButton>
+          ) : (
+            <PinkButton
+              large
+              primary
+              as={Link}
+              onClick={handleSignUpEvent}
+              type={"present"}
+            >
+              報名現場
+            </PinkButton>
+          )}
+          <PinkButton
+            large
+            primary
+            as={Link}
+            onClick={handleSignUpEvent}
+            type={"online"}
+          >
+            報名線上
+          </PinkButton>
         </Buttons>
-      }
+      )}
     </Block>
   );
 };
@@ -214,40 +272,55 @@ const WorkCard = ({ event, isWorkLimit }) => {
         <H5>稿件篇數：{event.Works.length}</H5>
       </NumsInfo>
       <Buttons>
-        <PinkButton large primary as={Link} to={`/event-work-list/${event.id}`}>稿件列表</PinkButton>
-        {isWorkLimit ? 
+        <PinkButton large primary as={Link} to={`/event-work-list/${event.id}`}>
+          稿件列表
+        </PinkButton>
+        {isWorkLimit ? (
           <NoneButton>稿件已滿</NoneButton>
-          :
-          <PinkButton large primary as={Link} to={"/work-add-page"}>我要投稿</PinkButton>
-        }
+        ) : (
+          <PinkButton
+            large
+            primary
+            as={Link}
+            to={`/event-page/${event.id}/works/add`}
+          >
+            我要投稿
+          </PinkButton>
+        )}
       </Buttons>
     </Block>
   );
 };
 
-const PortraitBlock = ({ image, nickname, username}) => {
+const PortraitBlock = ({ image, nickname, username }) => {
   return (
     <div>
       <Portrait image={image} />
-      <NicknameTag>{nickname}(@{username})</NicknameTag>
+      <NicknameTag>
+        {nickname}(@{username})
+      </NicknameTag>
     </div>
   );
 };
 
 const AttendeeBlock = ({ content, event, participantId }) => {
-  let participants = []
-  for (let i = 0; i < event.participant.length; i++ ) {
+  let participants = [];
+  for (let i = 0; i < event.participant.length; i++) {
     if (participantId.indexOf(Number(event.participant[i].id)) > -1) {
-      participants.push(event.participant[i])
+      participants.push(event.participant[i]);
     }
   }
   return (
     <StyledAttendeeBlock>
       <H5>{content}</H5>
       <AttedeePortraits>
-      {participants.map((participant) => (
-        <PortraitBlock image={participant.portrait} nickname={participant.nickname} username={participant.username}/>
-      ))}
+        {participants.map((participant) => (
+          <PortraitBlock
+            image={participant.portrait}
+            nickname={participant.nickname}
+            username={participant.username}
+          />
+        ))}
       </AttedeePortraits>
     </StyledAttendeeBlock>
   );
@@ -256,73 +329,75 @@ const AttendeeBlock = ({ content, event, participantId }) => {
 export default function EventPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
-  const event = useSelector(store => store.event.event)
-  const eventParticipants = useSelector(store => store.event.eventParticipants)
-  const isAttendEvent = useSelector(store => store.event.isAttendEvent)
-  const isWorkLimit = useSelector(store => store.event.isWorkLimit)
-  const isPresentLimit = useSelector(store => store.event.isPresentLimit)
-  const getMe = useSelector(selectMe)
+  const event = useSelector((store) => store.event.event);
+  const eventParticipants = useSelector(
+    (store) => store.event.eventParticipants
+  );
+  const isAttendEvent = useSelector((store) => store.event.isAttendEvent);
+  const isWorkLimit = useSelector((store) => store.event.isWorkLimit);
+  const isPresentLimit = useSelector((store) => store.event.isPresentLimit);
+  const getMe = useSelector(selectMe);
 
   useEffect(() => {
-    dispatch(getEvent(id))
-    dispatch(getEventParticipants(id))
-  }, [id, dispatch, isAttendEvent, isWorkLimit]); 
+    dispatch(getEvent(id));
+    dispatch(getEventParticipants(id));
+  }, [id, dispatch, isAttendEvent, isWorkLimit]);
 
-  if (!event || !eventParticipants || !getMe) return null
+  if (!event || !eventParticipants || !getMe) return null;
 
   const checkIsAttend = () => {
-    let participantId = event.participant.map((participant) => participant.id)
-    let getMeId = getMe.id
+    let participantId = event.participant.map((participant) => participant.id);
+    let getMeId = getMe.id;
     if (participantId.indexOf(getMeId) > -1) {
-      dispatch(checkAttend(true))
+      dispatch(checkAttend(true));
     } else {
-      dispatch(checkAttend(false))
+      dispatch(checkAttend(false));
     }
-  }
+  };
 
   const checkPresentIsLimit = () => {
-    let presentLimit = event.presentAttendeesLimit
-    let presentNum = eventParticipants.present.length
+    let presentLimit = event.presentAttendeesLimit;
+    let presentNum = eventParticipants.present.length;
     // let presentNum = 30
     if (presentNum >= presentLimit) {
-      dispatch(checkPresentNum(true))
+      dispatch(checkPresentNum(true));
     } else {
-      dispatch(checkPresentNum(false))
+      dispatch(checkPresentNum(false));
     }
-  }
+  };
 
   const checkWorkIsLimit = () => {
-    let workLimit = event.workLimit
-    let workNum = event.Works.length
+    let workLimit = event.workLimit;
+    let workNum = event.Works.length;
     if (workNum >= workLimit) {
-      dispatch(checkWorkNum(true))
-      console.log(isPresentLimit)
+      dispatch(checkWorkNum(true));
+      console.log(isPresentLimit);
     } else {
-      dispatch(checkWorkNum(false))
-      console.log(isPresentLimit)
+      dispatch(checkWorkNum(false));
+      console.log(isPresentLimit);
     }
-  }
+  };
 
-  checkIsAttend()
-  checkWorkIsLimit()
-  checkPresentIsLimit()
+  checkIsAttend();
+  checkWorkIsLimit();
+  checkPresentIsLimit();
 
   const handleSignUpEvent = (e) => {
-    let attendType = e.target.getAttribute("type")
-    alert("報名參加：" + event.title + "; 類型：" + attendType)
+    let attendType = e.target.getAttribute("type");
+    alert("報名參加：" + event.title + "; 類型：" + attendType);
     dispatch(signUpEvent(id, attendType)).then((res) => {
-      alert(res.message)
-    })
-    dispatch(checkAttend(true))
-  }
+      alert(res.message);
+    });
+    dispatch(checkAttend(true));
+  };
 
   const handleCancelSignUpEvent = (e) => {
-    alert("取消參加：" + event.title)
+    alert("取消參加：" + event.title);
     dispatch(cancelSignUpEvent(id)).then((res) => {
-      alert(res.message)
-    })
-    dispatch(checkAttend(false))
-  }
+      alert(res.message);
+    });
+    dispatch(checkAttend(false));
+  };
 
   return (
     <MaxPage>
@@ -334,21 +409,33 @@ export default function EventPage() {
         />
         <Wrapper>
           <Main>
-            <EventInProcess event={event}/>
-            <AttendCard 
+            <EventInProcess event={event} />
+            <AttendCard
               event={event}
-              participants={eventParticipants} 
-              handleSignUpEvent={handleSignUpEvent} 
-              handleCancelSignUpEvent={handleCancelSignUpEvent} 
+              participants={eventParticipants}
+              handleSignUpEvent={handleSignUpEvent}
+              handleCancelSignUpEvent={handleCancelSignUpEvent}
               isAttend={isAttendEvent}
               isPresentLimit={isPresentLimit}
             />
             <WorkCard event={event} isWorkLimit={isWorkLimit} />
           </Main>
           <Sidebar>
-            <AttendeeBlock content={"現場參加者"} event={event} participantId={eventParticipants.present} />
-            <AttendeeBlock content={"線上參加者"} event={event} participantId={eventParticipants.online} />
-            <AttendeeBlock content={"候補"} event={event} participantId={eventParticipants.alternative} />
+            <AttendeeBlock
+              content={"現場參加者"}
+              event={event}
+              participantId={eventParticipants.present}
+            />
+            <AttendeeBlock
+              content={"線上參加者"}
+              event={event}
+              participantId={eventParticipants.online}
+            />
+            <AttendeeBlock
+              content={"候補"}
+              event={event}
+              participantId={eventParticipants.alternative}
+            />
           </Sidebar>
         </Wrapper>
       </AllWrapper>
