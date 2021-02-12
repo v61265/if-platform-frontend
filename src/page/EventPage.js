@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
 import { useParams, Link } from "react-router-dom";
@@ -7,6 +7,8 @@ import { Button } from "../components/Button";
 import { H4, H5, Hsb, Ps } from "../components/Text";
 import { Avatar } from "../components/Avatar";
 import { PageTitle } from "../components/Title";
+import { TextModal, CheckModal } from "../components/Modal";
+import { textModalContent, checkModalContent } from "../constants/variable";
 import {
   getEvent,
   getEventParticipants,
@@ -184,18 +186,22 @@ const EventInProcess = ({ event }) => {
         <Hsb>活動地點 | {event.location}</Hsb>
         <Hsb>稿件篇數 | {event.workLimit}</Hsb>
         <Hsb>現場名額 | {event.presentAttendeesLimit}</Hsb>
-        <Hsb>
-          會議連結 |{" "}
-          <a href={event.meetingLink} target="_blank">
-            點我
-          </a>
-        </Hsb>
-        <Hsb>
-          音檔連結 |{" "}
-          <a href={event.referance} target="_blank">
-            點我
-          </a>
-        </Hsb>
+        {event.meetingLink && (
+          <Hsb>
+            會議連結 |{" "}
+            <a href={event.meetingLink} target="_blank">
+              點我
+            </a>
+          </Hsb>
+        )}
+        {event.referance && (
+          <Hsb>
+            音檔連結 |{" "}
+            <a href={event.referance} target="_blank">
+              點我
+            </a>
+          </Hsb>
+        )}
         <Ps>{descriptionText}</Ps>
       </EventInfo>
     </StyledEventInProcess>
@@ -204,8 +210,7 @@ const EventInProcess = ({ event }) => {
 
 const AttendCard = ({
   participants,
-  handleSignUpEvent,
-  handleCancelSignUpEvent,
+  handleOpenModal,
   isAttend,
   isPresentLimit,
 }) => {
@@ -222,7 +227,8 @@ const AttendCard = ({
             large
             secondary
             as={Link}
-            onClick={handleCancelSignUpEvent}
+            onClick={handleOpenModal}
+            type={"cancelSignUpEvent"}
           >
             取消報名
           </GreyButton>
@@ -234,7 +240,7 @@ const AttendCard = ({
               large
               secondary
               as={Link}
-              onClick={handleSignUpEvent}
+              onClick={handleOpenModal}
               type={"present"}
             >
               候補現場
@@ -244,7 +250,7 @@ const AttendCard = ({
               large
               primary
               as={Link}
-              onClick={handleSignUpEvent}
+              onClick={handleOpenModal}
               type={"present"}
             >
               報名現場
@@ -254,7 +260,7 @@ const AttendCard = ({
             large
             primary
             as={Link}
-            onClick={handleSignUpEvent}
+            onClick={handleOpenModal}
             type={"online"}
           >
             報名線上
@@ -326,8 +332,18 @@ const AttendeeBlock = ({ content, event, participantId }) => {
   );
 };
 
+const initIsModal = {
+  present: false,
+  online: false,
+  cancelSignUpEvent: false,
+  signUpEventSuccess: false,
+  cancelSignUpEventSuccess: false,
+};
+
 export default function EventPage() {
   const { id } = useParams();
+  const [isModal, setIsModal] = useState(initIsModal);
+  const [requestType, setRequestType] = useState("");
   const dispatch = useDispatch();
   const event = useSelector((store) => store.event.event);
   const eventParticipants = useSelector(
@@ -371,10 +387,8 @@ export default function EventPage() {
     let workNum = event.Works.length;
     if (workNum >= workLimit) {
       dispatch(checkWorkNum(true));
-      console.log(isPresentLimit);
     } else {
       dispatch(checkWorkNum(false));
-      console.log(isPresentLimit);
     }
   };
 
@@ -382,21 +396,29 @@ export default function EventPage() {
   checkWorkIsLimit();
   checkPresentIsLimit();
 
-  const handleSignUpEvent = (e) => {
-    let attendType = e.target.getAttribute("type");
-    alert("報名參加：" + event.title + "; 類型：" + attendType);
-    dispatch(signUpEvent(id, attendType)).then((res) => {
+  const handleSignUpEvent = () => {
+    setIsModal(initIsModal);
+    dispatch(signUpEvent(id, requestType)).then((res) => {
       alert(res.message);
     });
     dispatch(checkAttend(true));
   };
 
-  const handleCancelSignUpEvent = (e) => {
-    alert("取消參加：" + event.title);
+  const handleCancelSignUpEvent = () => {
     dispatch(cancelSignUpEvent(id)).then((res) => {
       alert(res.message);
     });
+    setIsModal(initIsModal);
     dispatch(checkAttend(false));
+  };
+
+  const handleOpenModal = ({ target }) => {
+    setIsModal({ ...isModal, [target.type]: true });
+    setRequestType(target.type);
+  };
+
+  const handleCloseModal = () => {
+    setIsModal(initIsModal);
   };
 
   return (
@@ -413,7 +435,7 @@ export default function EventPage() {
             <AttendCard
               event={event}
               participants={eventParticipants}
-              handleSignUpEvent={handleSignUpEvent}
+              handleOpenModal={handleOpenModal}
               handleCancelSignUpEvent={handleCancelSignUpEvent}
               isAttend={isAttendEvent}
               isPresentLimit={isPresentLimit}
@@ -439,6 +461,21 @@ export default function EventPage() {
           </Sidebar>
         </Wrapper>
       </AllWrapper>
+      {Object.keys(isModal).map((modal) => {
+        if (!isModal[modal]) return "";
+        if (checkModalContent[modal])
+          return (
+            <CheckModal
+              content={checkModalContent[modal]}
+              handleCloseModal={handleCloseModal}
+              handleConfirm={
+                requestType === "cancelSignUpEvent"
+                  ? handleCancelSignUpEvent
+                  : handleSignUpEvent
+              }
+            />
+          );
+      })}
     </MaxPage>
   );
 }
