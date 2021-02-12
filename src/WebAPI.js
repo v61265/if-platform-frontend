@@ -204,3 +204,60 @@ export const cancelSignUpEvent = (id) => {
     },
   }).then((res) => res.json());
 };
+
+export const addWork = ({
+  title,
+  eventId,
+  category,
+  open,
+  anonymous,
+  content,
+}) => {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/works/add`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title,
+      eventId,
+      category,
+      open,
+      anonymous,
+      content,
+    }),
+  }).then((res) => res.json());
+};
+
+export const getWorks = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(
+    `${BASE_URL}/works?` +
+      new URLSearchParams({
+        authorId: id,
+        _expand_all: true,
+      }),
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return await response.json();
+};
+
+export const getWork = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(`${BASE_URL}/works/${id}`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return await response.json();
+};
