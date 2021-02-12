@@ -4,7 +4,7 @@ const BASE_URL = "http://imaginary-friends.tw:3001/v1";
 export const register = async (
   username,
   password,
-  passwordAgain,
+  againPassword,
   nickname,
   email,
   session,
@@ -18,7 +18,7 @@ export const register = async (
     body: JSON.stringify({
       username,
       password,
-      passwordAgain,
+      againPassword,
       nickname,
       email,
       session,
@@ -128,7 +128,7 @@ export const getEvents = () => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const getEvent = (id) => {
@@ -137,7 +137,7 @@ export const getEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const getEventParticipants = (id) => {
@@ -146,45 +146,60 @@ export const getEventParticipants = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
-export const addEvent = (title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => {
+export const addEvent = (
+  title,
+  presentAttendeesLimit,
+  workLimit,
+  time,
+  openWorksTime,
+  location
+) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/add`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
-      authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify({
-      title, 
-      presentAttendeesLimit,
-      workLimit,
-      time,
-      openWorksTime,
-      location,
-    })
-  }).then(res => res.json());
-};
-
-export const editEvent = (id, title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => {
-  const token = getAuthToken();
-  return fetch(`${BASE_URL}/events/${id}`, {
-    method: 'PATCH',
-    headers: {
-      'content-type': 'application/json',
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      title, 
+      title,
       presentAttendeesLimit,
       workLimit,
       time,
       openWorksTime,
       location,
     }),
-  }).then(res => res.json());
+  }).then((res) => res.json());
+};
+
+export const editEvent = (
+  id,
+  title,
+  presentAttendeesLimit,
+  workLimit,
+  time,
+  openWorksTime,
+  location
+) => {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/events/${id}`, {
+    method: "PATCH",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title,
+      presentAttendeesLimit,
+      workLimit,
+      time,
+      openWorksTime,
+      location,
+    }),
+  }).then((res) => res.json());
 };
 
 export const deleteEvent = (id) => {
@@ -193,21 +208,21 @@ export const deleteEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
 };
 
 export const signUpEvent = (id, type) => {
   const token = getAuthToken();
   return fetch(`${BASE_URL}/events/sign-up/${id}`, {
-    method: 'POST',
+    method: "POST",
     headers: {
-      'content-type': 'application/json',
+      "content-type": "application/json",
       authorization: `Bearer ${token}`,
     },
     body: JSON.stringify({
-      type
-    })
-  }).then(res => res.json());
+      type,
+    }),
+  }).then((res) => res.json());
 };
 
 export const cancelSignUpEvent = (id) => {
@@ -216,5 +231,62 @@ export const cancelSignUpEvent = (id) => {
     headers: {
       authorization: `Bearer ${token}`,
     },
-  }).then(res => res.json());
+  }).then((res) => res.json());
+};
+
+export const addWork = ({
+  title,
+  eventId,
+  category,
+  open,
+  anonymous,
+  content,
+}) => {
+  const token = getAuthToken();
+  return fetch(`${BASE_URL}/works/add`, {
+    method: "POST",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+    body: JSON.stringify({
+      title,
+      eventId,
+      category,
+      open,
+      anonymous,
+      content,
+    }),
+  }).then((res) => res.json());
+};
+
+export const getWorks = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(
+    `${BASE_URL}/works?` +
+      new URLSearchParams({
+        authorId: id,
+        _expand_all: true,
+      }),
+    {
+      method: "GET",
+      headers: {
+        "content-type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    }
+  );
+  return await response.json();
+};
+
+export const getWork = async (id) => {
+  const token = getAuthToken();
+  const response = await fetch(`${BASE_URL}/works/${id}`, {
+    method: "GET",
+    headers: {
+      "content-type": "application/json",
+      authorization: `Bearer ${token}`,
+    },
+  });
+  return await response.json();
 };

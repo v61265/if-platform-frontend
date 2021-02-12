@@ -3,11 +3,12 @@ import { BackgroundPage, PageContainer } from "../components/Page";
 import { useParams } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { getUser, selectMe, selectUser } from "../redux/reducer/userSlice";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { H1, H4, H5, LightText, Ps, HighLight, Pxs } from "../components/Text";
 import { Avatar } from "../components/Avatar";
 import { ButtonGroup, Button } from "../components/Button";
 import { WorkListItem } from "../components/ListItem";
+import { getWorks as getWorksAPI } from "../WebAPI";
 
 const Wrapper = styled.div`
   display: flex;
@@ -70,36 +71,24 @@ const MdPageContainer = styled(PageContainer)`
   }
 `;
 
-const testWork = [
-  {
-    id: 1,
-    title: "媽媽的圍巾",
-    tags: ["新詩", "懷舊", "女性"],
-    event: "一件很小，很美的事情一件很小，很美的事情一件很小，很美的事情",
-  },
-  {
-    id: 2,
-    title: "媽媽的圍巾",
-    tags: ["新詩", "懷舊", "女性"],
-    event: "一件很小，很美的事情",
-  },
-  {
-    id: 3,
-    title: "媽媽的圍巾",
-    tags: [1, 2, 3],
-    event: "一件很小，很美的事情",
-  },
-];
-
 export default function UserPage() {
   const { id } = useParams();
   const dispatch = useDispatch();
   const me = useSelector(selectMe);
   const user = useSelector(selectUser);
+  const [works, setWorks] = useState();
+
+  async function getWorks(id) {
+    const data = await getWorksAPI(id);
+    setWorks(data.works);
+  }
+
   useEffect(() => {
     if (!Number(id) === me.id) dispatch(getUser({ id }));
+    getWorks(id);
   }, [id, me, dispatch]);
   const data = Number(id) === me.id ? me : user;
+
   return (
     <BackgroundPage>
       <Wrapper>
@@ -141,9 +130,11 @@ export default function UserPage() {
           <H1>
             <HighLight>作品</HighLight>
           </H1>
-          {testWork.map((test) => (
-            <WorkListItem key={test.title} content={test} edit />
-          ))}
+          {console.log(works)}
+          {works !== undefined &&
+            works.map((work) => (
+              <WorkListItem key={work.id} data={work} edit />
+            ))}
         </MdPageContainer>
       </Wrapper>
     </BackgroundPage>

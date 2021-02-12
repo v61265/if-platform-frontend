@@ -284,7 +284,12 @@ const WorkCard = ({ event, isWorkLimit }) => {
         {isWorkLimit ? (
           <NoneButton>稿件已滿</NoneButton>
         ) : (
-          <PinkButton large primary as={Link} to={"/work-add-page"}>
+          <PinkButton
+            large
+            primary
+            as={Link}
+            to={`/event-page/${event.id}/works/add`}
+          >
             我要投稿
           </PinkButton>
         )}
