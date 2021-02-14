@@ -84,7 +84,7 @@ export const getEvents = () => (dispatch) => {
   dispatch(setIsLoadingEvent(true));
   getEventsAPI()
     .then((res) => {
-      dispatch(setEvents(res.data.events));
+      dispatch(setEvents(res.events));
       dispatch(setIsLoadingEvent(false));
     })
     .catch((err) => {
@@ -97,7 +97,7 @@ export const getEvent = (id) => (dispatch) => {
   dispatch(setIsLoadingEvent(true));
   getEventAPI(id)
     .then((res) => {
-      dispatch(setEvent(res.data.event[0]));
+      dispatch(setEvent(res.event));
       dispatch(setIsLoadingEvent(false));
     })
     .catch((err) => {

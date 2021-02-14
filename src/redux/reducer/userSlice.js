@@ -74,7 +74,7 @@ export const getMe = createAsyncThunk(
       }
       const response = await getMeAPI();
       if (!response.ok) throw new Error(response.message);
-      return { goal: data.goal, data: response.data.user };
+      return { goal: data.goal, data: response.user };
     } catch (error) {
       return rejectWithValue({
         goal: data.goal,
@@ -90,7 +90,7 @@ export const getUsers = createAsyncThunk(
     try {
       const response = await getUsersAPI();
       if (!response.ok) throw new Error(response.message);
-      return response.data.users;
+      return response.users;
     } catch (error) {
       return rejectWithValue(error.message ? error.message : "失敗");
     }
@@ -105,7 +105,7 @@ export const getUser = createAsyncThunk(
       if (!data) response = await getUserAPI(id);
       else response = await updateUser({ id, data });
       if (!response.ok) throw new Error(response.message);
-      return response.data.user;
+      return response.user;
     } catch (error) {
       return rejectWithValue(error.message ? error.message : "失敗");
     }
