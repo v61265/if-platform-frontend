@@ -1,4 +1,4 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 import {
   getEvents as getEventsAPI,
   getEvent as getEventAPI,
@@ -8,10 +8,10 @@ import {
   deleteEvent as deleteEventAPI,
   signUpEvent as signUpEventAPI,
   cancelSignUpEvent as cancelSignUpEventAPI,
-} from '../../WebAPI';
+} from "../../WebAPI";
 
 export const eventReducer = createSlice({
-  name: 'event',
+  name: "event",
   initialState: {
     isLoadingEvent: false,
     isAttendEvent: false,
@@ -89,6 +89,7 @@ export const getEvents = () => (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
+      dispatch(setIsLoadingEvent(false));
     });
 };
 
@@ -101,6 +102,7 @@ export const getEvent = (id) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
+      dispatch(setIsLoadingEvent(false));
     });
 };
 
@@ -113,55 +115,56 @@ export const getEventParticipants = (id) => (dispatch) => {
     })
     .catch((err) => {
       console.log(err);
+      dispatch(setIsLoadingEvent(false));
     });
 };
 
-export const addEvent = (title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => (dispatch) => {
-  return addEventAPI(title, presentAttendeesLimit, workLimit, time, openWorksTime, location).then((res) => {
-    dispatch(setNewEventResponse(res))
-    return res
+export const addEvent = (input) => (dispatch) => {
+  return addEventAPI(input).then((res) => {
+    dispatch(setNewEventResponse(res));
+    return res;
   });
 };
 
-export const editEvent = (title, presentAttendeesLimit, workLimit, time, openWorksTime, location) => (dispatch) => {
-  dispatch(setIsLoadingEvent(true))
-  return addEventAPI(title, presentAttendeesLimit, workLimit, time, openWorksTime, location).then((res) => {
-    dispatch(setEvent(res))
-    dispatch(setIsLoadingEvent(false))
-    return res
+export const editEvent = (id, input) => (dispatch) => {
+  dispatch(setIsLoadingEvent(true));
+  return addEventAPI(id, input).then((res) => {
+    dispatch(setEvent(res));
+    dispatch(setIsLoadingEvent(false));
+    return res;
   });
 };
 
 export const deleteEvent = (id) => (dispatch) => {
   return deleteEventAPI(id).then((res) => {
-    dispatch(setDeleteEventResponse(res))
-  })
+    dispatch(setDeleteEventResponse(res));
+  });
 };
 
 export const signUpEvent = (id, type) => (dispatch) => {
   return signUpEventAPI(id, type).then((res) => {
-    dispatch(setIsAttendEvent(true))
-    return res
+    dispatch(setIsAttendEvent(true));
+    return res;
   });
 };
 
 export const cancelSignUpEvent = (id) => (dispatch) => {
   return cancelSignUpEventAPI(id).then((res) => {
-    dispatch(setIsAttendEvent(false))
-    return res
-  })
+    dispatch(setIsAttendEvent(false));
+    return res;
+  });
 };
 
 export const checkAttend = (attendBoolean) => (dispatch) => {
-  dispatch(setIsAttendEvent(attendBoolean))
-}
+  dispatch(setIsAttendEvent(attendBoolean));
+};
 
 export const checkPresentNum = (presentLimitBoolean) => (dispatch) => {
-  dispatch(setIsPresentLimit(presentLimitBoolean))
-}
+  dispatch(setIsPresentLimit(presentLimitBoolean));
+};
 
 export const checkWorkNum = (workLimitBoolean) => (dispatch) => {
-  dispatch(setIsWorkLimit(workLimitBoolean))
-}
+  dispatch(setIsWorkLimit(workLimitBoolean));
+};
 
 export default eventReducer.reducer;
