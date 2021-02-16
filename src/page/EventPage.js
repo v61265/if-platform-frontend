@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch, useSelector } from "react-redux";
-import { useParams, Link } from "react-router-dom";
+import { useParams, Link, useHistory } from "react-router-dom";
 import { BackgroundPage, EventContainer } from "../components/Page";
 import { Button } from "../components/Button";
 import { H4, H5, Hsb, Ps } from "../components/Text";
@@ -17,6 +17,7 @@ import {
   checkAttend,
   checkWorkNum,
   checkPresentNum,
+  deleteEvent,
 } from "../redux/reducer/eventSlice";
 import { selectMe } from "../redux/reducer/userSlice";
 
@@ -166,10 +167,14 @@ const Portrait = styled(Avatar)`
   position: relative;
 `;
 
-const EventInProcess = ({ event }) => {
-  let eventDate = event.time.toString().split("T")[0];
-  let eventTime = event.time.toString().split("T")[1].slice(0, 5);
-  let dateTime = eventDate + " " + eventTime;
+const EventInProcess = ({ event, getMe, handleOpenModal }) => {
+  let time = event.time
+  let year = new Date(time).getFullYear();
+  let month = ("0" + (new Date(time).getMonth() + 1)).slice(-2);
+  let date = ("0" + new Date(time).getDate()).slice(-2);
+  let hour = ("0" + new Date(time).getHours()).slice(-2);
+  let minute = ("0" + new Date(time).getMinutes()).slice(-2);
+  let dateTime = `${year}-${month}-${date} ${hour}:${minute}`;
   let description = event.description;
   let descriptionText = description.split("/n").map((text) => (
     <span>
@@ -203,6 +208,28 @@ const EventInProcess = ({ event }) => {
           </Hsb>
         )}
         <Ps>{descriptionText}</Ps>
+        {getMe.role === "admin" && 
+          <Buttons>
+            <PinkButton
+              large
+              primary
+              as={Link}
+              to={`/events/edit/${event.id}`}
+            >
+              編輯活動
+            </PinkButton>
+            <GreyButton
+              large
+              secondary
+              as={Link}
+              id={event.id}
+              onClick={handleOpenModal}
+              type={"deleteEvent"}
+            >
+              刪除活動
+            </GreyButton>
+          </Buttons>
+        } 
       </EventInfo>
     </StyledEventInProcess>
   );
@@ -338,6 +365,7 @@ const initIsModal = {
   cancelSignUpEvent: false,
   signUpEventSuccess: false,
   cancelSignUpEventSuccess: false,
+  deleteEvent: false,
 };
 
 export default function EventPage() {
@@ -353,6 +381,7 @@ export default function EventPage() {
   const isWorkLimit = useSelector((store) => store.event.isWorkLimit);
   const isPresentLimit = useSelector((store) => store.event.isPresentLimit);
   const getMe = useSelector(selectMe);
+  const history = useHistory();
 
   useEffect(() => {
     dispatch(getEvent(id));
@@ -374,7 +403,7 @@ export default function EventPage() {
   const checkPresentIsLimit = () => {
     let presentLimit = event.presentAttendeesLimit;
     let presentNum = eventParticipants.present.length;
-    // let presentNum = 30
+
     if (presentNum >= presentLimit) {
       dispatch(checkPresentNum(true));
     } else {
@@ -421,6 +450,32 @@ export default function EventPage() {
     setIsModal(initIsModal);
   };
 
+  const handleDeleteEvent = () => {
+    dispatch(deleteEvent(id)).then(() => {
+      setIsModal(initIsModal);
+      history.push("/");
+    });
+  };
+
+  const handleEditEvent = () => {
+    history.push(`/events/add/${id}`);
+  };
+
+  const handleConfirm = () => {
+    switch (requestType) {
+      case "cancelSignUpEvent":
+        handleCancelSignUpEvent();
+        break;
+      case "deleteEvent":
+        handleDeleteEvent();
+        break;
+      case "editEvent":
+        handleEditEvent();
+      default:
+        handleSignUpEvent();
+    }
+  };
+
   return (
     <MaxPage>
       <AllWrapper>
@@ -431,7 +486,11 @@ export default function EventPage() {
         />
         <Wrapper>
           <Main>
-            <EventInProcess event={event} />
+            <EventInProcess
+              event={event}
+              getMe={getMe}
+              handleOpenModal={handleOpenModal}
+            />
             <AttendCard
               event={event}
               participants={eventParticipants}
@@ -468,11 +527,7 @@ export default function EventPage() {
             <CheckModal
               content={checkModalContent[modal]}
               handleCloseModal={handleCloseModal}
-              handleConfirm={
-                requestType === "cancelSignUpEvent"
-                  ? handleCancelSignUpEvent
-                  : handleSignUpEvent
-              }
+              handleConfirm={handleConfirm}
             />
           );
       })}

@@ -96,9 +96,13 @@ const Block = styled.div`
 `;
 
 const EventInProcess = ({ event }) => {
-  let eventDate = event.time.toString().split("T")[0];
-  let eventTime = event.time.toString().split("T")[1].slice(0, 5);
-  let dateTime = eventDate + " " + eventTime;
+  let time = event.time
+  let year = new Date(time).getFullYear();
+  let month = ("0" + (new Date(time).getMonth() + 1)).slice(-2);
+  let date = ("0" + new Date(time).getDate()).slice(-2);
+  let hour = ("0" + new Date(time).getHours()).slice(-2);
+  let minute = ("0" + new Date(time).getMinutes()).slice(-2);
+  let dateTime = `${year}-${month}-${date} ${hour}:${minute}`;
   let description = event.description;
   let descriptionText = description.split("/n").map((text) => (
     <span>
@@ -126,10 +130,13 @@ const EventInProcess = ({ event }) => {
   );
 };
 
-const EventInPast = ({ title, picture, time, location, id, buttonValue }) => {
-  let eventDate = time.toString().split("T")[0];
-  let eventTime = time.toString().split("T")[1].slice(0, 5);
-  let dateTime = eventDate + " " + eventTime;
+const EventInPast = ({ title, picture, time, location, id, buttonValue, inProgress }) => {
+  let year = new Date(time).getFullYear();
+  let month = ("0" + (new Date(time).getMonth() + 1)).slice(-2);
+  let date = ("0" + new Date(time).getDate()).slice(-2);
+  let hour = ("0" + new Date(time).getHours()).slice(-2);
+  let minute = ("0" + new Date(time).getMinutes()).slice(-2);
+  let dateTime = `${year}-${month}-${date} ${hour}:${minute}`;
   return (
     <StyledEventInPast marginBottom={16} padding={24}>
       <H3>{title}</H3>
@@ -139,7 +146,7 @@ const EventInPast = ({ title, picture, time, location, id, buttonValue }) => {
         <Pxs>{location}</Pxs>
       </EventInPastInfo>
       <ButtonWrapper>
-        <GreyButton large secondary as={Link} to={`/history-event-page/${id}`}>
+        <GreyButton large secondary as={Link} to={inProgress ? `/event-page/${id}` : `/history-event-page/${id}`}>
           {buttonValue}
         </GreyButton>
       </ButtonWrapper>
@@ -180,7 +187,6 @@ export default function HomePage() {
   }
 
   // pagination
-  let offset = itemsPerPage * (currentPage - 1);
   let totalEvents = eventsHistory.length;
   let totalPages = Math.ceil(totalEvents / itemsPerPage);
 
@@ -225,12 +231,12 @@ export default function HomePage() {
           title={"進行中的活動"}
           color={({ theme }) => theme.color.primary}
         />
-        {eventsInProcess.length > 1 ? (
+        {eventsInProcess.length >= 1 ? (
           <EventInProcess event={eventsInProcess[0]} />
         ) : (
           <EventDefault />
         )}
-        {eventsInProcess.length > 1 && (
+        {eventsInProcess.length >= 1 && (
           <EventList>
             {eventsInProcess.slice(1).map((eventInProcess) => (
               <EventInPast
@@ -240,6 +246,7 @@ export default function HomePage() {
                 location={eventInProcess.location}
                 id={eventInProcess.id}
                 buttonValue={"詳細資訊"}
+                inProgress
               />
             ))}
             <Block />

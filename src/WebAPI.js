@@ -124,7 +124,7 @@ export const updateUser = async (id, data) => {
 
 export const getEvents = () => {
   const token = getAuthToken();
-  return fetch(`${BASE_URL}/events?_limit=9`, {
+  return fetch(`${BASE_URL}/events?_limit=99999`, {
     headers: {
       authorization: `Bearer ${token}`,
     },

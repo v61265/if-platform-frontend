@@ -154,9 +154,13 @@ const Portrait = styled(Avatar)`
 `;
 
 const EventInProcess = ({ event }) => {
-  let eventDate = event.time.toString().split("T")[0];
-  let eventTime = event.time.toString().split("T")[1].slice(0, 5);
-  let dateTime = eventDate + " " + eventTime;
+  let time = event.time
+  let year = new Date(time).getFullYear();
+  let month = ("0" + (new Date(time).getMonth() + 1)).slice(-2);
+  let date = ("0" + new Date(time).getDate()).slice(-2);
+  let hour = ("0" + new Date(time).getHours()).slice(-2);
+  let minute = ("0" + new Date(time).getMinutes()).slice(-2);
+  let dateTime = `${year}-${month}-${date} ${hour}:${minute}`;
   let description = event.description;
   let descriptionText = description.split("/n").map((text) => (
     <span>
