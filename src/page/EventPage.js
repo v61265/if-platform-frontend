@@ -105,7 +105,7 @@ const Buttons = styled.div`
 
 const NoWrapButtons = styled(Buttons)`
   flex-wrap: nowrap;
-`
+`;
 
 const PinkButton = styled(Button)`
   width: initial;
@@ -217,25 +217,28 @@ const EventInProcess = ({ event, getMe, handleOpenModal }) => {
           </Hsb>
         )}
         <Ps>{descriptionText}</Ps>
-        {
-  getMe.role === "admin" && (
-    <NoWrapButtons>
-      <PinkButton large primary as={Link} to={`/events/edit/${event.id}`}>
-        編輯活動
-      </PinkButton>
-      <GreyButton
-        large
-        secondary
-        as={Link}
-        id={event.id}
-        onClick={handleOpenModal}
-        type={"deleteEvent"}
-      >
-        刪除活動
-      </GreyButton>
-    </NoWrapButtons>
-  );
-}
+        {getMe.role === "admin" && 
+          <NoWrapButtons>
+            <PinkButton
+              large
+              primary
+              as={Link}
+              to={`/events/edit/${event.id}`}
+            >
+              編輯活動
+            </PinkButton>
+            <GreyButton
+              large
+              secondary
+              as={Link}
+              id={event.id}
+              onClick={handleOpenModal}
+              type={"deleteEvent"}
+            >
+              刪除活動
+            </GreyButton>
+          </NoWrapButtons>
+        } 
       </EventInfo>
     </StyledEventInProcess>
   );
