@@ -129,7 +129,6 @@ export const addEvent = (input) => (dispatch) => {
 export const editEvent = (id, input) => (dispatch) => {
   dispatch(setIsLoadingEvent(true));
   return addEventAPI(id, input).then((res) => {
-    dispatch(setEvent(res));
     dispatch(setIsLoadingEvent(false));
     return res;
   });
