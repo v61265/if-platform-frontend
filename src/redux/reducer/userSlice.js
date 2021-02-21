@@ -20,7 +20,7 @@ const register = async ({
   session,
   contact,
 }) => {
-  const response = await registerAPI(
+  const { ok, message, token } = await registerAPI(
     username,
     password,
     againPassword,
@@ -29,27 +29,27 @@ const register = async ({
     session,
     contact
   );
-  if (!response.ok) throw new Error(response.message);
-  setAuthToken(response.token);
+  if (!ok) throw new Error(message);
+  setAuthToken(token);
 };
 
 const login = async ({ username, password }) => {
-  const response = await loginAPI(username, password);
-  if (!response.ok) throw new Error(response.message);
-  setAuthToken(response.token);
+  const { ok, message, token } = await loginAPI(username, password);
+  if (!ok) throw new Error(message);
+  setAuthToken(token);
 };
 const updateMe = async (data) => {
-  const response = await updateMeAPI(data);
-  if (!response.ok) throw new Error(response.message);
+  const { ok, message } = await updateMeAPI(data);
+  if (!ok) throw new Error(message);
 };
 
 const updatePassword = async ({ oldPassword, newPassword, againPassword }) => {
-  const response = await updatePasswordAPI({
+  const { ok, message } = await updatePasswordAPI({
     oldPassword,
     newPassword,
     againPassword,
   });
-  if (!response.ok) throw new Error(response.message);
+  if (!ok) throw new Error(message);
 };
 
 export const getMe = createAsyncThunk(
@@ -72,9 +72,9 @@ export const getMe = createAsyncThunk(
         default:
           break;
       }
-      const response = await getMeAPI();
-      if (!response.ok) throw new Error(response.message);
-      return { goal: data.goal, data: response.user };
+      const { ok, message, user } = await getMeAPI();
+      if (!ok) throw new Error(message);
+      return { goal: data.goal, data: user };
     } catch (error) {
       return rejectWithValue({
         goal: data.goal,
@@ -88,9 +88,9 @@ export const getUsers = createAsyncThunk(
   "user/getUsers",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await getUsersAPI();
-      if (!response.ok) throw new Error(response.message);
-      return response.users;
+      const { ok, message, users } = await getUsersAPI();
+      if (!ok) throw new Error(message);
+      return users;
     } catch (error) {
       return rejectWithValue(error.message ? error.message : "失敗");
     }
