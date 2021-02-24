@@ -84,7 +84,7 @@ export function NavItem({ to, content }) {
     exact: true,
   });
   return (
-    <NavButton to={to} className={match ? "active" : ""}>
+    <NavButton as={Link} to={to} className={match ? "active" : ""}>
       {content}
     </NavButton>
   );

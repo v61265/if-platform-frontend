@@ -91,7 +91,7 @@ const Nav = styled.div`
     }
 
     & .menu-btn:checked ~ .navbar-list {
-      max-height: 240px;
+      max-height: 280px;
     }
 
     & .menu-btn:checked ~ .menu-icon .hamburger-icon {
@@ -137,6 +137,7 @@ export function Header({ isLogin }) {
             <div className={"navbar-list"}>
               <NavItem to={"/"} content={"首頁"} />
               <NavItem to={"/users"} content={"成員列表"} />
+              {me.role === "admin" && <NavItem to={"/events/add"} content={"新增活動"} />}
               <NavButton>登出</NavButton>
               <Avatar to={`/users/${me.id}`} image={me.portrait} />
             </div>
