@@ -162,6 +162,7 @@ IconInput.propTypes = {
 };
 
 const StyledIconSelect = styled.select`
+  ${StyledCustomInput}
   ${StyledCustomSelect}
   ${StyledShadow}
   ${IconPadding}
